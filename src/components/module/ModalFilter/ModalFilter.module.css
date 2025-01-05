@@ -1,0 +1,159 @@
+.modal_container {
+    position: absolute;
+    z-index: 4;
+    width: 100%;
+    min-height: 100vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+    transition: all .3s ease-in;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.close_modal {
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    min-height: 100vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.modal_content {
+    width: 40%;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    z-index: 6;
+}
+
+.data_content {
+    width: 50%;
+    padding-bottom: 25px;
+}
+
+
+.wrapper_search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #d4d4d4;
+    margin-bottom: 5px;
+}
+
+.input_search {
+    all: unset;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.input_search::placeholder {
+    color: #999999;
+}
+
+.search_icon {
+    font-size: 1.3rem;
+}
+
+.users_container {
+    height: 35vh;
+    overflow-y: auto;
+}
+
+.none_users {
+    color: "";
+}
+
+.date_header {
+    border-bottom: 1px solid #d4d4d4;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+
+.icon_ca {
+    justify-self: flex-end;
+}
+
+
+.calender_btn {
+    margin-top: 1.5rem;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    color: var(--color-1);
+    background-color: var(--color-3);
+    padding: 8px 30px;
+    text-align: center;
+}
+
+.wrapper_calender {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-top: 20px;
+}
+
+.date_show_range {
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.date_input_wrapper {
+    border: 1px solid #d4d4d4;
+    padding: 5px;
+}
+
+@media (max-width:1200px) {
+    .data_content {
+        width: 65%;
+    }
+}
+
+@media (max-width:857px) {
+    .modal_content {
+        width: 50%;
+    }
+
+    .data_content {
+        width: 65%;
+    }
+}
+
+@media (max-width:768px) {
+    .data_content {
+        width: 85%;
+    }
+}
+
+@media (max-width:600px) {
+
+    .modal_content,
+    .data_content {
+        width: 95%;
+    }
+
+    .wrapper_calender {
+        justify-content: center;
+    }
+
+    .date_show_range {
+        display: none;
+    }
+}

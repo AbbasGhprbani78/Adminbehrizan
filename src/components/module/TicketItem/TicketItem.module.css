@@ -1,0 +1,90 @@
+.TicketLine,
+.TicketLine_m {
+    width: 100%;
+    background-color: #f5f5f5;
+    color: black;
+    justify-content: space-between;
+    padding: 25px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.TicketLine {
+    display: flex;
+}
+
+.ticketicon {
+    margin-left: 15px;
+    font-size: 1.5rem;
+    color: var(--color-1);
+}
+
+.status_ticket {
+    margin-bottom: 0;
+}
+
+
+.closed {
+    color: rgb(169, 30, 30);
+}
+
+.open {
+    color: rgb(35, 133, 35);
+}
+
+
+.custom_checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.custom_checkbox input {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    background-color: #6b6572;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+}
+
+.custom_checkbox input:checked+.checkmark::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 8px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox_input:checked+.checkmark {
+    background-color: var(--color-3);
+}
+
+.label_text {
+    font-weight: bold;
+    color: #000;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.wrapper_left_ticket {
+    display: flex;
+    align-items: center;
+}
+
+
+@media (max-width:768px) {
+    .ticketicon {
+        font-size: 2rem;
+    }
+}

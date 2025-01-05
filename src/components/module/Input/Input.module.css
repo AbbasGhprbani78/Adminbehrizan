@@ -1,0 +1,26 @@
+.inputwrapper {
+    border: 1px solid #9a9a9a;
+    position: relative;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lableinput {
+    position: absolute;
+    right: 10px;
+    top: -12px;
+    z-index: 2;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: calc(.7rem + .1vw);
+    color: #49454f;
+}
+
+.input {
+    width: 100%;
+    font-size: .9rem;
+    color: var(--color-1);
+}

@@ -1,0 +1,26 @@
+.textareawrapper {
+    border: 1px solid #9a9a9a;
+    position: relative;
+    border-radius: 5px;
+}
+
+.labeltextarea {
+    position: absolute;
+    right: 10px;
+    top: -12px;
+    z-index: 2;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: calc(.7rem + .1vw);
+    color: #49454f;
+}
+
+.textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: .9rem;
+    color: var(--color-1);
+    padding: 10px 10px 0 10px;
+}

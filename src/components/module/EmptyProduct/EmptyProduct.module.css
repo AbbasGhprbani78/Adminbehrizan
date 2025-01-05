@@ -1,0 +1,34 @@
+.cartempty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+
+}
+
+.text_empty {
+    margin: 2rem 0;
+}
+
+.btnempty {
+    all: unset;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 15px;
+    background-color: var(--color-1);
+    color: var(--color-3);
+    cursor: pointer;
+}
+
+
+.iconplus {
+    margin-right: 10px;
+}

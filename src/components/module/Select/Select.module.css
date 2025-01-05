@@ -1,0 +1,85 @@
+.container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #9a9a9a;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: .9rem;
+    color: var(--color-1);
+}
+
+.lableinput {
+    position: absolute;
+    right: 10px;
+    top: -12px;
+    z-index: 2;
+    background-color: #fff;
+    padding: 0 10px;
+    font-size: calc(.7rem + .1vw);
+    color: #49454f;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 4;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: calc(.8rem + .1vw);
+    color: #49454f;
+}
+
+.dropdown::-webkit-scrollbar {
+    display: none;
+}
+
+
+.dropdown {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.dropdown::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+.dropdownitem {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdownitem:hover {
+    background-color: #f0f0f0;
+}
+
+.selectedprovincecontainer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.selectedprovince {
+    font-size: 18px;
+    color: #49454f;
+}

@@ -1,0 +1,164 @@
+.signupcontainer {
+    display: flex;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.formcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logocontainer {
+    background-color: var(--color-1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.textco {
+    color: #fff;
+    font-size: calc(1rem + .1vw);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 0;
+}
+
+.signupform {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 15px 0px #E9E9E9;
+    padding: 20px;
+    width: 80%;
+}
+
+.formcontent {
+    width: 80%;
+    margin: 1rem auto 0 auto;
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+
+.headersignup {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 7px;
+    justify-content: space-between;
+}
+
+.usericon {
+    color: #374957
+}
+
+.Signuptext {
+    margin-bottom: 0;
+    margin-right: 15px;
+    color: var(--color-1);
+}
+
+.btnsignup {
+    margin-top: 2.5rem;
+    border: none;
+    background-color: var(--color-1);
+    color: var(--color-3);
+    padding: 6px 35px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    position: relative;
+}
+
+.btnsignupicon {
+    position: absolute;
+    left: 10%;
+}
+
+.errorinput {
+    color: rgb(204, 22, 22);
+    margin-top: 15px;
+    font-size: .8rem;
+}
+
+.disablebtn {
+    opacity: .9;
+    cursor: not-allowed;
+}
+
+/*start style mobile */
+.signupcontainerm {
+    background-color: var(--color-1);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.logoformm {
+    width: 153px;
+    height: 78px;
+}
+
+.formcontent::-webkit-scrollbar {
+    display: none;
+}
+.formcontent {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.formcontent::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+.linksignin {
+    color: var(--color-1);
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+
+/* end style mobile */
+@media (max-width:992px) {
+    .signupform {
+        width: 90%;
+    }
+
+    .formcontent {
+        width: 85%;
+    }
+}
+
+@media (max-width:768px) {
+
+    .textco {
+        position: relative;
+        font-size: calc(1rem + .2vw);
+        margin-bottom: 2px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .signupform {
+        box-shadow: none;
+    }
+
+    .formcontent {
+        width: 90%;
+        max-height: 50vh;
+        overflow-y: scroll;
+    }
+
+
+}

@@ -1,0 +1,57 @@
+.headercontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    width: 100%;
+    border-bottom: 1px solid var(--color-1);
+    padding-bottom: 5px;
+    padding-top: 10px;
+
+}
+
+.headertext {
+    font-weight: bold;
+    position: relative;
+}
+
+
+.headermobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-1);
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 4;
+}
+
+.logomobile {
+    height: auto;
+    width: 100px;
+}
+
+.iconham {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+
+.headertext::before {
+    content: '';
+    display: block;
+    width: var(--title-width);
+    height: 2px;
+    background-color: var(--color-3);
+    top: 28.5px;
+    left: 0;
+    position: absolute;
+}
+
+.wrap_logo {
+    background-color: var(--color-1);
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}

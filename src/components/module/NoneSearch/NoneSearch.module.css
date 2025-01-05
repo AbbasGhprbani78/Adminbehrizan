@@ -1,0 +1,12 @@
+.none_result {
+    margin-top: 10vh;
+    text-align: center;
+    color: #797979;
+    width: 100%;
+    font-size: calc(1rem + .2vw);
+}
+
+.notfound {
+    font-size: calc(1.4rem + 2vw);
+    color: #797979;
+}

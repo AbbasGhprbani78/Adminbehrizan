@@ -1,0 +1,783 @@
+.wrapperpage {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pagecontent {
+    width: 82%;
+    margin-right: 18%;
+    padding: 0 3%;
+    min-height: 100vh;
+    background-color: #f5f5f5
+}
+
+.maincontent {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 63px);
+}
+
+.file {
+    color: #fff;
+    background-color: var(--color-1);
+    border-radius: 10px;
+    padding: 7px 12px;
+    cursor: pointer;
+
+}
+
+.newtticket {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Buttonsend {
+    background-color: var(--color-3);
+    color: var(--color-1);
+    padding: 7px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+    width: max-content;
+    border: none;
+    outline: none;
+}
+
+.dis {
+    cursor: not-allowed;
+}
+
+.title {
+    margin-bottom: 1.3rem;
+}
+
+.Button1 {
+    color: var(--color-1);
+    padding: 10px 30px;
+    border-radius: 8px;
+    border: none;
+}
+
+.Button2 {
+    color: var(--color-1);
+    padding: 10px 40px;
+    border-radius: 8px;
+}
+
+.Button,
+.Button1,
+.Button2,
+.Buttonsend {
+    cursor: pointer;
+}
+
+.input_ticket_wrap {
+    width: 90%;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 20px;
+    background-color: #fff;
+}
+
+.input_ticket {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.iconsend {
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+.swal-footer {
+    text-align: center !important;
+}
+
+.wrapinpt_m {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 10px;
+    width: 90%;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.none_ticket {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon_ticket_none {
+    font-size: 10rem;
+}
+
+.ticket_text_none {
+    margin-top: 2rem;
+    font-size: calc(1.8rem + .1vw);
+}
+
+
+.file_wrapper {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.labelfile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-3);
+    cursor: pointer;
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+}
+
+.fileicon_m {
+    font-size: 20px;
+    color: #fff;
+}
+
+.input_tick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+
+.TicketMassageBox {
+    flex: 1;
+    height: calc(100% - 20px);
+    margin-top: -20px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.TicketMassageBox::-webkit-scrollbar {
+    display: none;
+}
+
+.TicketMassageBox {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.TicketMassageBox::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+.MassageBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 0 40px 0;
+}
+
+.close_ticket {
+    border: 1px solid var(--color-1);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.lockicon {
+    color: red;
+    font-size: 1.3rem;
+    margin-right: 1rem;
+}
+
+.wrapinpt_m_close {
+    text-align: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 10px;
+    width: 90%;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: #ffff;
+}
+
+@media (min-width:1025px) {
+
+    .input_message_p {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        bottom: 10px;
+        width: 70%;
+        left: 42%;
+        transform: translate(-50%);
+    }
+
+    .pagecontent1 {
+        width: 82%;
+        margin-right: 18%;
+        padding: 0 3%;
+        min-height: 100vh;
+        background-color: #f5f5f5;
+    }
+
+    .ChatTitle {
+        width: 100%;
+        padding: 10px 5px;
+        z-index: 1;
+        background-color: #f5f5f5;
+    }
+
+    .ChatTitle svg {
+        background-color: var(--color-3);
+        font-size: 1.8em;
+        padding: 5px;
+        border-radius: 20px;
+    }
+
+    .ChatTitle span {
+        margin-right: 10px;
+        color: var(--color-1);
+    }
+
+    .ButtonBox {
+        width: 100%;
+        padding: 20px 0;
+        background-color: #f5f5f5;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        gap: 20px;
+
+    }
+
+    .Button {
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--color-1);
+    }
+
+    .activetab {
+        background-color: var(--color-1);
+        color: #fff;
+    }
+
+    .TabBox {
+        width: 100%;
+        background-color: #f5f5f5;
+        padding: 10px 0 0 0;
+    }
+
+    .WhthoutTicket {
+        width: 100%;
+        height: 77vh;
+        background-color: #fff;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+    }
+
+    .WhthoutTicket svg {
+        font-size: 7rem;
+        color: rgb(187, 187, 187);
+    }
+
+    .WhthoutTicket span {
+        font-size: 2rem;
+    }
+
+    .InputBox {
+        width: 100%;
+    }
+
+    .ChildrenBox {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 40px;
+    }
+
+    .InputTitle {
+        margin-top: 0px;
+        width: 30%;
+        background: none;
+        border-bottom: 1px solid rgb(170, 170, 170);
+    }
+
+    .InputTitle input {
+        background: none;
+        margin-bottom: 10px;
+    }
+
+    .InputTitle input::placeholder {
+        color: rgb(170, 170, 170);
+
+    }
+
+    .InputText {
+        width: 100%;
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .InputText span {
+        color: rgb(170, 170, 170);
+
+    }
+
+    .TextareaBox {
+        width: 100%;
+        border: 1px solid rgb(170, 170, 170);
+        border-radius: 5px;
+    }
+
+    .InputText textarea {
+        border: none;
+        resize: none;
+        width: 100%;
+        background: none;
+        height: 30vh;
+        padding: 10px;
+    }
+
+    .OptionButton {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+
+    .checkbox {
+        display: flex;
+        gap: 10px;
+    }
+
+    .FileButton {
+        color: white !important;
+    }
+
+    .ButtonBox2 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        margin-top: 1.4rem;
+    }
+
+    .Button1 {
+        color: var(--color-1);
+        padding: 10px 30px;
+        border-radius: 8px;
+        border: none;
+    }
+
+    .Button2 {
+        color: var(--color-1);
+        padding: 10px 40px;
+        border-radius: 8px;
+    }
+
+    .TicketList {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0px 10px 20px;
+        gap: 40px;
+    }
+
+    .TicketListBox {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+
+        padding: 40px;
+    }
+
+    .text {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+
+    }
+
+    .TicketItemBox {
+        width: 100%;
+        max-height: 60vh;
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .TicketItemBox::-webkit-scrollbar {
+        display: none;
+    }
+
+    .TicketItemBox {
+        overflow: -moz-scrollbars-none;
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .TicketItemBox::-webkit-scrollbar {
+        display: none;
+        /* Safari and Chrome */
+    }
+
+    .ChatBox {
+        width: 100%;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+
+
+
+    .noneBox {
+        display: none;
+    }
+
+    .pagecontent2 {
+        display: none;
+    }
+
+    .activetab {
+        background-color: var(--color-1);
+        color: #fff;
+    }
+}
+
+@media (max-width:1025px) {
+    .pagecontent {
+        width: 100%;
+        margin-right: 0;
+        padding: 0;
+    }
+
+
+    .createTicket {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .ButtonBox {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .TicketListBox {
+        width: 90%;
+        padding: 20px;
+        margin: 0 auto;
+    }
+
+}
+
+@media (max-width:1025px) {
+    .maincontent {
+        margin-top: 80px;
+    }
+
+    .ButtonBox {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+        font-size: .9rem;
+        padding: 10px 20px 15px 0;
+        background-color: #fff;
+        z-index: 2;
+        width: 95%;
+    }
+
+    .Button1 {
+        width: 100%;
+        color: var(--color-1);
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background-color: var(--color-3);
+        text-align: center;
+        margin-top: 1.5rem;
+        border: none;
+        margin-bottom: 10px;
+    }
+
+    .Button2 {
+        width: 70%;
+        color: var(--color-1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+
+
+    .noneBox {
+        display: none;
+    }
+
+    .withOutTicket {
+        width: 100%;
+        height: 70vh;
+        background-color: #fff;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 40px;
+
+    }
+
+    .withOutTicket svg {
+        font-size: 7rem;
+        color: rgb(187, 187, 187);
+    }
+
+    .withOutTicket span {
+        font-size: 1.5rem;
+    }
+
+    .ticketList {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0px 10px 0px;
+        gap: 40px;
+    }
+
+    .TicketListBox {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        width: 95%;
+    }
+
+    .text {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        padding: 20px 0;
+
+    }
+
+    .TicketItemBox {
+        width: 100%;
+        max-height: 60vh;
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .TicketItemBox::-webkit-scrollbar {
+        display: none;
+    }
+
+    .TicketItemBox {
+        overflow: -moz-scrollbars-none;
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .TicketItemBox::-webkit-scrollbar {
+        display: none;
+        /* Safari and Chrome */
+    }
+
+    .createTicket {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .title {
+        font-size: .9rem;
+        padding: 10px 0 20px 0;
+    }
+
+    .InputTitle {
+        margin-top: 0px;
+        width: 100%;
+        background: none;
+        border-bottom: 1px solid rgb(170, 170, 170);
+    }
+
+    .InputTitle input {
+        background: none;
+        margin-bottom: 10px;
+    }
+
+    .InputTitle input::placeholder {
+        color: rgb(170, 170, 170);
+
+    }
+
+    .InputText {
+        width: 100%;
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .InputText span {
+        color: rgb(170, 170, 170);
+
+    }
+
+    .TextareaBox {
+        width: 100%;
+        border: 1px solid rgb(170, 170, 170);
+        border-radius: 5px;
+    }
+
+    .InputText textarea {
+        border: none;
+        resize: none;
+        width: 100%;
+        background: none;
+        height: 28vh;
+        outline: none;
+        padding: 10px;
+    }
+
+    .OptionButton {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+    }
+
+    .checkbox {
+        display: flex;
+        gap: 10px;
+        font-size: .8rem;
+        width: 100%;
+        justify-content: start;
+        margin: 0 0 10px 0;
+    }
+
+    .FileButton {
+
+        font-size: .7rem;
+        padding: 5px 10px;
+        border-radius: 8px;
+        background-color: var(--color-1);
+        color: white !important;
+    }
+
+    .ButtonBox2 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+
+    }
+
+
+
+    .Buttonfile {
+        width: 100%;
+        margin: 0px 0 10px 0;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+
+    }
+
+
+    .Button {
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--color-1);
+    }
+
+    .activetab {
+        background-color: var(--color-1);
+        color: #fff;
+    }
+
+    .ChildrenBox {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+
+@media (max-width:600px) {
+    .InputText textarea {
+        height: 20vh;
+    }
+}
+
+@media (max-width:380px) {
+    .title {
+        margin-bottom: 0;
+    }
+
+    .ChildrenBox {
+        padding-bottom: 20px;
+    }
+}

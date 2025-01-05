@@ -1,0 +1,14 @@
+.user_wrapper {
+    padding: 8px 5px;
+    cursor: pointer;
+    transition: all .3s ease-in;
+}
+
+.user_wrapper:hover {
+    background-color: rgb(243, 240, 240);
+}
+
+.userInfo {
+    width: 100%;
+    cursor: pointer;
+}

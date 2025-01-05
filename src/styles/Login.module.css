@@ -1,0 +1,300 @@
+.logincontainer {
+    display: flex;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.formcontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.phoneform {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 15px 0px #E9E9E9;
+    padding: 20px 20px 4rem 20px;
+    width: 85%;
+}
+
+.inputwrapper {
+    width: 70%;
+    margin: 0 auto;
+    margin-top: 3rem;
+}
+
+.paneltext {
+    color: var(--color-1);
+}
+
+.btnwrapper {
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.btnphoneform {
+    color: var(--color-3);
+    background-color: var(--color-1);
+    border-radius: 8px;
+    padding: 6px 35px;
+}
+
+.iconformphone {
+    margin-right: 10px;
+}
+
+
+.logocontainer {
+    background-color: var(--color-1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {}
+
+.textco {
+    position: absolute;
+    bottom: 7%;
+    left: 50%;
+    transform: translate(-50%);
+    color: #fff;
+    font-size: calc(1rem + .1vw);
+}
+
+
+.errorinput {
+    color: rgb(204, 22, 22);
+    margin-top: 15px;
+    font-size: .8rem;
+}
+
+.disablebtn {
+    opacity: .9;
+    cursor: not-allowed;
+}
+
+.passwordform {
+    border-radius: 10px;
+    box-shadow: 0px 2px 15px 0px #E9E9E9;
+    width: 85%;
+    padding: 20px 20px 20px 20px;
+    color: var(--color-1);
+    background-color: #fff;
+}
+
+.formpasswordcontent {
+    width: 70%;
+    margin: 2.5rem auto 0 auto;
+}
+
+.paneltext {}
+
+.helptext {
+    margin-top: 10px;
+    background-color: #fdf4d2;
+    font-size: calc(.8rem + .1vw);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.forgettext {
+    color: #374957;
+    border-bottom: 1px solid #374957;
+    width: max-content;
+    font-size: calc(.8rem + .1vw);
+    cursor: pointer;
+    margin-top: 1rem
+}
+
+.sendcodebtn {
+    border: none;
+    border-radius: 10px;
+    background-color: #bfc4c9;
+    color: var(--color-1);
+    display: flex;
+    justify-content: center;
+    padding: 8px 15px;
+    width: 100%;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.mailicon,
+.angleicon {
+    font-size: 1.5rem;
+}
+
+.sendcodeform {
+    border-radius: 10px;
+    box-shadow: 0px 2px 15px 0px #E9E9E9;
+    width: 85%;
+    padding: 20px 25px 30px 20px;
+    color: var(--color-1);
+    background-color: #fff;
+}
+
+.sendcodecontent {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.userphone {
+    text-align: left;
+    box-shadow: 0px 1px 4px 0px #E9E9E9;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
+
+.inputpasswordwrap {
+    direction: ltr;
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inputpassword {
+    border-bottom: 1px solid var(--color-1);
+    width: 15%;
+    text-align: center;
+}
+
+.time {
+    margin-top: 2rem;
+}
+
+.linksignup {
+    color: var(--color-1);
+    font-size: .8rem;
+    cursor: pointer;
+}
+
+.texttosend {
+    font-size: calc(.8rem + .1vw);
+}
+
+.againcode {
+    border-bottom: 1px solid var(--color-1);
+    cursor: pointer;
+    width: max-content;
+}
+
+/* mobile */
+
+.logincontainerm {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: var(--color-1);
+}
+
+
+
+@media (max-width:1200px) {
+    .formpasswordcontent {
+        width: 80%;
+    }
+}
+
+@media (max-width:1024px) {
+    .formpasswordcontent {
+        width: 90%;
+    }
+}
+
+@media (max-width:992px) {
+    .inputwrapper {
+        width: 90%;
+    }
+
+    .userphone {
+        width: 100%;
+    }
+
+    .sendcodecontent {
+        width: 90%;
+    }
+}
+
+@media (max-width:768px) {
+    .textco {
+        position: relative;
+        font-size: calc(1rem + .2vw);
+        margin-bottom: 2px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .phoneform {
+        box-shadow: none;
+        padding-bottom: 1.4rem;
+    }
+
+    .inputwrapper {
+        width: 100%;
+    }
+
+    .btnphoneform {
+        width: 100%;
+    }
+
+    .logoformm {
+        width: 153px;
+        height: 78px;
+    }
+
+    .passwordform,
+    .sendcodeform {
+        box-shadow: none;
+    }
+
+    .formpasswordcontent {
+        width: 80%;
+    }
+
+    .textsendsms {
+        font-size: .9rem;
+    }
+
+    .sendcodecontent {
+        width: 80%;
+    }
+
+    .btnphoneform,
+    .userphone {
+        width: 100%;
+    }
+
+    .textpassword {
+        font-size: .9rem;
+    }
+}
+
+@media (max-width:600px) {
+    .sendcodecontent {
+        width: 95%;
+    }
+
+    .formpasswordcontent {
+        width: 95%;
+    }
+
+    .passwordform {
+        margin-top: -25px;
+    }
+
+    .textsendsms {
+        font-size: .8rem;
+    }
+
+    .sendcodebtn {
+        padding: 8px 5px;
+    }
+}

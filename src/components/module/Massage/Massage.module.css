@@ -1,0 +1,105 @@
+.message_wrapper_snder {
+    align-self: flex-end;
+    max-width: 40%;
+}
+
+.message_wrapper_receiver {
+    align-self: flex-start;
+    max-width: 40%;
+}
+
+.message_content {
+    display: flex;
+    flex-direction: column;
+}
+
+.file_sender {
+    align-items: end;
+}
+
+.date_message_snder {
+    text-align: end;
+    margin-left: 10px;
+    font-size: .9rem;
+}
+
+.date_message_receiver {
+    margin-right: 10px;
+    font-size: .9rem;
+}
+
+.fileIcon_receiver,
+.fileIcon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 5px;
+    color: var(--color-1);
+}
+
+.fileIcon {
+    color: var(--color-3);
+}
+
+
+@media (min-width:900px) {
+    .MassageBoxSend {
+        height: auto;
+        position: relative;
+        background-color: #fff;
+        border: 2px solid var(--color-1);
+        word-wrap: break-word;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        width: fit-content;
+    }
+
+    .MassageBoxReceive {
+        height: auto;
+        background-color: var(--color-1);
+        word-wrap: break-word;
+        color: white;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        width: fit-content;
+    }
+}
+
+@media (max-width:900px) {
+    .MassageBoxSend {
+        height: auto;
+        position: relative;
+        background-color: #fff;
+        border: 2px solid var(--color-1);
+        word-wrap: break-word;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        width: fit-content;
+    }
+
+    .MassageBoxReceive {
+        height: auto;
+        background-color: var(--color-1);
+        word-wrap: break-word;
+        color: white;
+        margin: 10px;
+        align-self: flex-end;
+        border-radius: 10px;
+        padding: 10px;
+        width: fit-content;
+    }
+}
+
+@media (max-width:768px) {
+    .message_wrapper_snder {
+        align-self: flex-end;
+        max-width: 70%;
+    }
+
+    .message_wrapper_receiver {
+        align-self: flex-start;
+        max-width: 70%;
+    }
+}

@@ -1,0 +1,56 @@
+.searchboxwrapper {
+    width: 35%;
+
+}
+
+.searchboxcontant {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 4px 0px #BDBDBD;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #fff;
+    z-index: 2;
+}
+
+.searhiconwrapper {
+    background-color: var(--color-1);
+    padding: 7px 10px;
+}
+
+.searchicon {
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.inputsearch {
+    width: 100%;
+    padding: 0 15px;
+}
+
+.inputsearch::-webkit-input-placeholder {
+    font-size: .8rem;
+}
+
+@media (max-width:1025px) {}
+
+@media (max-width:992px) {
+
+    .searchboxwrapper {
+        width: 50%;
+    }
+
+}
+
+@media (max-width:728px) {}
+
+@media (max-width:600px) {
+    .searchboxwrapper {
+        width: 100%;
+    }
+
+
+}
