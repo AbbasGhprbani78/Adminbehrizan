@@ -126,6 +126,15 @@
     margin: 90px auto 0 auto;
 }
 
+
+.wrap_search {
+    padding: 5px 10px;
+}
+
+.not_found{
+    text-align: center;
+}
+
 @media (max-width:1025px) {
     .pagecontent {
         width: 100%;

@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './UserItem.module.css'
 export default function UserItem({ user, setMainUser, setShowChat }) {
     return (
