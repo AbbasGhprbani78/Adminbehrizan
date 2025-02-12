@@ -1,8 +1,11 @@
-.ordertrackitemwrappper {
+.ordertrackitemwrapper {
     margin-top: 1.4rem;
     border-bottom: 1px solid #d9d9d9;
-    padding: 0 20px 20px 20px
+    padding: 0 20px 20px 20px;
+    position: relative;
 }
+
+
 
 .ordertrackdetail {
     display: flex;
@@ -15,10 +18,11 @@
 .leftdetail {
     display: flex;
     align-items: center;
-
 }
 
-.leftdetail {}
+.leftdetail {
+    gap: 20px;
+}
 
 .titlebold {
     font-weight: bold;
@@ -35,7 +39,7 @@
     color: #fff;
     background-color: var(--color-1);
     border-radius: 10px;
-    padding: 3px 30px;
+    padding: 3px 15px;
     cursor: pointer;
     width: max-content;
 }
@@ -118,9 +122,26 @@
     color: var(--color-1);
 }
 
-.number_mobile {
-    display: none;
+.wrap_icon {
+    cursor: pointer;
 }
+
+.wrap_detail_icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+}
+
+.back_btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--color-3);
+    font-size: 1.2rem;
+}
+
 
 @media (max-width:992px) {
     .progressc {
@@ -161,11 +182,8 @@
         width: 95%;
     }
 
-    .wrap_link_number {
+    .wrap_detail_icon {
         margin-top: 1.4rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         width: 100%;
     }
 }
@@ -174,15 +192,15 @@
     .numberorder {
         display: none;
     }
-
-    .number_mobile {
-        display: block;
-        font-size: .9rem;
-    }
 }
 
 @media (max-width:600px) {
+
     .reqnumberwrapper {
         display: none;
+    }
+
+    .ordertrackitemwrapper {
+        margin-top: 0;
     }
 }

@@ -39,7 +39,10 @@
     position: absolute;
     right: 0;
     z-index: 2;
+    transition: all .3 ease;
 }
+
+
 
 .item_first {
     top: 130%;
@@ -49,8 +52,10 @@
     top: 250%;
 }
 
-.item_third {
-    top: 370%;
+
+.active {
+    background-color: var(--color-3);
+    color: #ffff;
 }
 
 @media (max-width:600px) {
