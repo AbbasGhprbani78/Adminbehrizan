@@ -342,7 +342,7 @@ export default function Login() {
                       </form>
                       {isForget && (
                         <>
-                          <div className="text-center">
+                          {/* <div className="text-center">
                             <button
                               className={styles.sendcodebtn}
                               onClick={() => setShowEmail(true)}
@@ -352,7 +352,7 @@ export default function Login() {
                                 ارسال کد یکبار مصرف به ایمیل
                               </span>
                             </button>
-                          </div>
+                          </div> */}
                           <div className="text-center">
                             <button className={styles.sendcodebtn}>
                               <MdOutlineMail className={styles.mailicon} />
@@ -744,7 +744,7 @@ export default function Login() {
                                 </span>
                               </button>
                             </div>
-                            <div
+                            {/* <div
                               className="text-center"
                               onClick={() => setShowEmail(true)}
                             >
@@ -754,7 +754,7 @@ export default function Login() {
                                   ارسال کد یکبار مصرف به ایمیل
                                 </span>
                               </button>
-                            </div>
+                            </div> */}
                           </>
                         )}
                       </div>

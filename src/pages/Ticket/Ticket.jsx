@@ -82,6 +82,15 @@ export default function Ticket() {
       formData.append("is_admin", 1);
       formData.append("category", ticket.ticket_category);
 
+      const tempMessage = {
+        message: "در حال ارسال...",
+        date: new Date(),
+        is_admin: true,
+        temp: true,
+      };
+
+      setSelectedTicket((prevMessages) => [...prevMessages, tempMessage]);
+
       try {
         const response = await axios.post(
           `${apiUrl}/chat/send-ticket/`,
@@ -98,7 +107,9 @@ export default function Ticket() {
             is_admin: true,
           };
 
-          setSelectedTicket((prevMessages) => [...prevMessages, newMessage]);
+          setSelectedTicket((prevMessages) =>
+            prevMessages.map((msg) => (msg.temp ? newMessage : msg))
+          );
 
           swal({
             title: "تیکت با موفقیت ارسال  شد",
@@ -406,7 +417,7 @@ export default function Ticket() {
                     ))}
                   {showfile && (
                     <div
-                      className="d-flex align-items-end mt-4 col-sm-12"
+                      className="d-flex align-items-end mt-4 col-sm-12 px-2"
                       style={{ direction: "rtl" }}
                     >
                       <div

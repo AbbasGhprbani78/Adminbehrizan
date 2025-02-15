@@ -117,8 +117,8 @@ export default function Users() {
           {loading ? (
             <Loading />
           ) : (
-            <>
-              <div className={styles.wrap_seach}>
+            <div className={styles.ordercontent}>
+              <div className={styles.topsec}>
                 <SearchBox
                   placeholder={"جستجو ..."}
                   value={search || ""}
@@ -137,7 +137,7 @@ export default function Users() {
                     />
                   ))}
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

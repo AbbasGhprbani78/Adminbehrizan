@@ -172,6 +172,10 @@
     }
 }
 
+.reqnumberwrapper {
+    margin-right: 30px;
+}
+
 @media (max-width:861px) {
     .mapstatus {
         flex-direction: column-reverse;
@@ -189,18 +193,32 @@
 }
 
 @media (max-width:712px) {
-    .numberorder {
-        display: none;
+    .ordertrackdetail {
+        flex-direction: column;
+        align-items: start;
+        gap: 10px;
     }
+
+    /* .numberorder {
+        display: none;
+    } */
 }
 
 @media (max-width:600px) {
 
-    .reqnumberwrapper {
+    .number_order {
         display: none;
+    }
+
+    .reqnumberwrapper {
+        margin-right: 0;
     }
 
     .ordertrackitemwrapper {
         margin-top: 0;
+    }
+
+    .ordertrackdetail {
+        padding-top: 10px;
     }
 }

@@ -110,8 +110,6 @@ export default function Chat() {
       message.trim() !== "" &&
       socketRef.current.readyState === WebSocket.OPEN
     ) {
-      setIsLoading(true);
-
       const tempMessage = {
         id: "pending",
         message,

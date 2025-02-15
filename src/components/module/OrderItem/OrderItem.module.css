@@ -1,9 +1,5 @@
 .cartItemwrappper {
-    background-color: #fff;
-    padding: 10px 0;
-    border-radius: 10px;
     color: var(--color-1) !important;
-
 }
 
 .itemhead {
@@ -60,6 +56,13 @@
 .imageorder_wrapper {
     height: 200px;
     width: 100%;
+}
+
+.image_wrapper_de {
+    height: 100%;
+    width: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .imageorder_wrapper>img {
