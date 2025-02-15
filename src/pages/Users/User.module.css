@@ -11,3 +11,67 @@
     background-color: #f5f5f5;
     position: relative;
 }
+
+.wrap_users_list {
+    height: calc(100dvh - 200px);
+    overflow: auto;
+    margin-top: 2rem;
+}
+
+.wrap_seach {
+    margin-top: 2rem;
+}
+
+
+.top_modal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.icon_close {
+    font-size: 1.7rem;
+    cursor: pointer;
+}
+
+.edit_form {}
+
+.wrap_actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.btn_form {
+    width: 50%;
+    border: none;
+    outline: none;
+    padding: 9px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn_submit {
+    background-color: var(--color-3);
+    color: #374957;
+}
+
+.icon_don {}
+
+.btn_form {}
+
+.btn_close {
+    color: #fff;
+    background-color: #9a9a9a;
+}
+
+.disablebtn {
+    opacity: .5;
+    cursor: not-allowed;
+}

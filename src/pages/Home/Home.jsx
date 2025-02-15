@@ -123,7 +123,6 @@ export default function Home() {
 
   const searchOrders = async (query, page = 1, page_size = 25) => {
     if (!query.trim()) return;
-
     if (page === 1) setIsSearch(true);
 
     try {
@@ -140,10 +139,12 @@ export default function Home() {
       );
 
       if (response.status === 200) {
+        const newResults =
+          Array.isArray(response.data) && response.data.length === 0
+            ? []
+            : response.data?.results || [];
         setFilterValue((prev) =>
-          page === 1
-            ? response.data.results
-            : [...prev, ...response.data.results]
+          page === 1 ? newResults : [...prev, ...newResults]
         );
 
         if (response.data.results.length < page_size) {
@@ -162,11 +163,11 @@ export default function Home() {
     }
   };
 
-    const resetOrders = () => {
-      setFilterValue(allOrders);
-      setPage(1);
-      setHasMore(true);
-    };
+  const resetOrders = () => {
+    setFilterValue(allOrders);
+    setPage(1);
+    setHasMore(true);
+  };
 
   useEffect(() => {
     if (!isFetched.current) {
@@ -210,7 +211,7 @@ export default function Home() {
                   />
                   <Filter setOpenmodal={setOpenmodal} all={resetOrders} />
                 </div>
-                {allOrders.length > 0 ? (
+                {allOrders?.length > 0 ? (
                   <>
                     {isSearch ? (
                       <p className="text-search">در حال جستوجو ...</p>

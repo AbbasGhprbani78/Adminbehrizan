@@ -9,6 +9,7 @@ export default function Texteara({ name, value, onChange, label }) {
                 name={name}
                 value={value}
                 onChange={onChange}
+                maxLength={2000}
             ></textarea>
         </div>
     )

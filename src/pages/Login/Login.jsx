@@ -9,7 +9,6 @@ import { IoEyeSharp } from "react-icons/io5";
 import { IoEyeOff } from "react-icons/io5";
 import axios from "axios";
 import { MdOutlineMail } from "react-icons/md";
-import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { MdEmail } from "react-icons/md";
 import "react-toastify/dist/ReactToastify.css";
