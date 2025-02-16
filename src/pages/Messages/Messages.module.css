@@ -44,11 +44,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.text_check_all {
+    cursor: pointer;
+}
+
+.list_users {
+    max-height: calc(100dvh - 180px);
+    overflow-y: scroll;
 }
 
 .list_users_container {
-    background-color: aqua;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    background-color: #fff;
 }
 
 .MuiGrid-root {

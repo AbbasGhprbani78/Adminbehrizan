@@ -6,7 +6,7 @@ export default function UserItemMessage() {
         <div className={styles.img_wrapper}>
           <img src="/public/images/user.png" alt="imageuser" />
         </div>
-        <span className={styles.user_name}></span>
+        <span className={styles.user_name}>نام کامل کاربر</span>
       </div>
 
       <input type="checkbox" className={styles.checkbox} />

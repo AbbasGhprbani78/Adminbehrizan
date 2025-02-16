@@ -28,7 +28,11 @@ export default function Messages() {
                   <span className={styles.text_check_all}>انتخاب همه</span>
                 </div>
                 <div className={styles.list_users}>
-                  <UserItemMessage />
+                  {Array(100)
+                    .fill(0)
+                    .map((item, i) => (
+                      <UserItemMessage key={i} />
+                    ))}
                 </div>
               </div>
             </Grid>

@@ -73,26 +73,26 @@ export default function Ticket() {
   //   }
   // };
 
-const handleTicketCloseChange = (ticketId, isChecked) => {
-  if (!allTickets) return;
+  const handleTicketCloseChange = (ticketId, isChecked) => {
+    if (!allTickets) return;
 
-  mutate(
-    (prevTickets) =>
-      prevTickets?.map((ticket) =>
-        ticket.ticket_id === ticketId
-          ? { ...ticket, ticket_close: isChecked }
-          : ticket
-      ) || [],
-    false 
-  );
+    mutate(
+      (prevTickets) =>
+        prevTickets?.map((ticket) =>
+          ticket.ticket_id === ticketId
+            ? { ...ticket, ticket_close: isChecked }
+            : ticket
+        ) || [],
+      false
+    );
 
-  const newOpenTicketCount =
-    allTickets.filter(
-      (ticket) => ticket.ticket_id !== ticketId && !ticket.ticket_close
-    ).length + (isChecked ? 0 : 1);
+    const newOpenTicketCount =
+      allTickets.filter(
+        (ticket) => ticket.ticket_id !== ticketId && !ticket.ticket_close
+      ).length + (isChecked ? 0 : 1);
 
-  setOpenTicket(newOpenTicketCount);
-};
+    setOpenTicket(newOpenTicketCount);
+  };
 
   const getSelectedTicket = (ticket) => {
     setTicket(ticket);
@@ -225,8 +225,6 @@ const handleTicketCloseChange = (ticketId, isChecked) => {
     }
   };
 
-
-
   useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -242,9 +240,9 @@ const handleTicketCloseChange = (ticketId, isChecked) => {
 
   useEffect(() => {
     const allOpenTicket = allTickets?.filter(
-      (ticket) => ticket.ticket_close == false
+      (ticket) => ticket?.ticket_close == false
     );
-    setOpenTicket(allOpenTicket.length);
+    setOpenTicket(allOpenTicket?.length);
   }, [allTickets]);
 
   useEffect(() => {
