@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "../../styles/Ticket.module.css";
 import SideBar from "../../components/module/SideBar/SideBar";
 import Header from "../../components/module/Header/Header";
@@ -13,10 +13,24 @@ import { MdAttachFile } from "react-icons/md";
 import { CircularProgressbar } from "react-circular-progressbar";
 import { BsFillFileEarmarkArrowDownFill } from "react-icons/bs";
 import { CiLock } from "react-icons/ci";
+import Loading from "../../components/module/Loading/Loading";
+import useSWR from "swr";
+const apiUrl = import.meta.env.VITE_API_URL;
+const fetcher = async (url) => {
+  const access = localStorage.getItem("access");
+  const headers = {
+    Authorization: `Bearer ${access}`,
+  };
+  const response = await axios.get(url, { headers });
+  if (response.status === 200) {
+    return response.data;
+  }
+};
+
 export default function Ticket() {
   const [tab, setTab] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
-  const [allTickets, setAllTickets] = useState([]);
+  // const [allTickets, setAllTickets] = useState([]);
   const [openTicket, setOpenTicket] = useState(0);
   const [selectedTicket, setSelectedTicket] = useState([]);
   const [textInput, setTextInput] = useState("");
@@ -24,44 +38,61 @@ export default function Ticket() {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const messageEndRef = useRef(null);
   const [showfile, setShowFile] = useState(false);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
-  const getAllTicket = async () => {
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
+  const {
+    data: allTickets,
+    mutate,
+    isLoading,
+  } = useSWR(`${apiUrl}/app/ticket-admin/`, fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 15 * 60 * 1000,
+  });
 
-    try {
-      const response = await axios.get(`${apiUrl}/app/ticket-admin/`, {
-        headers,
-      });
+  // const getAllTicket = async () => {
+  //   setLoading(true);
+  //   const access = localStorage.getItem("access");
+  //   const headers = {
+  //     Authorization: `Bearer ${access}`,
+  //   };
 
-      if (response.status === 200) {
-        console.log(response.data);
-        setAllTickets(response.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/app/ticket-admin/`, {
+  //       headers,
+  //     });
 
-  const handleTicketCloseChange = (ticketId, isChecked) => {
-    setAllTickets((prevTickets) => {
-      const updatedTickets = prevTickets.map((ticket) => {
-        if (ticket.ticket_id === ticketId) {
-          return { ...ticket, ticket_close: isChecked };
-        }
-        return ticket;
-      });
-      return updatedTickets;
-    });
+  //     if (response.status === 200) {
+  //       console.log(response.data);
+  //       setAllTickets(response.data);
+  //     }
+  //   } catch (e) {
+  //     if (e.response?.status === 401) {
+  //       localStorage.removeItem("access");
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-    const newOpenTicketCount = allTickets.filter(
-      (ticket) => ticket.ticket_close === false
-    ).length;
-    setOpenTicket(newOpenTicketCount);
-  };
+const handleTicketCloseChange = (ticketId, isChecked) => {
+  if (!allTickets) return;
+
+  mutate(
+    (prevTickets) =>
+      prevTickets?.map((ticket) =>
+        ticket.ticket_id === ticketId
+          ? { ...ticket, ticket_close: isChecked }
+          : ticket
+      ) || [],
+    false 
+  );
+
+  const newOpenTicketCount =
+    allTickets.filter(
+      (ticket) => ticket.ticket_id !== ticketId && !ticket.ticket_close
+    ).length + (isChecked ? 0 : 1);
+
+  setOpenTicket(newOpenTicketCount);
+};
 
   const getSelectedTicket = (ticket) => {
     setTicket(ticket);
@@ -194,9 +225,7 @@ export default function Ticket() {
     }
   };
 
-  useEffect(() => {
-    getAllTicket();
-  }, []);
+
 
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -228,270 +257,289 @@ export default function Ticket() {
       <div className={styles.pagecontent}>
         <Header title={"تیکت ها"} />
         <div className={styles.maincontent}>
-          {windowWidth < 1025 ? (
-            <>
-              <div className={styles.ButtonBox}>
-                <div
-                  className={`${styles.Button} ${
-                    tab === 1 || tab === 3 ? styles.activetab : ""
-                  }`}
-                  onClick={() => setTab(1)}
-                >
-                  <span>تیکت ها</span>
-                </div>
-              </div>
-              {tab === 1 && (
-                <div className={styles.allTickets}>
-                  {allTickets.length > 0 ? (
-                    <div className={styles.TicketListBox}>
-                      <div className={styles.text}>
-                        <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
-                        <span>تیکت‌های باز: {openTicket}</span>
-                      </div>
-                      <div className={styles.TicketItemBox}>
-                        {allTickets
-                          .slice()
-                          .reverse()
-                          .map((ticket) => (
-                            <TicketItem
-                              key={ticket.ticket_id}
-                              ticket={ticket}
-                              onClick={() => getSelectedTicket(ticket)}
-                              onCheckboxChange={handleTicketCloseChange}
-                            />
-                          ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div className={styles.none_ticket}>
-                        <SlSocialDropbox className={styles.icon_ticket_none} />
-                        <p className={styles.ticket_text_none}>
-                          موردی یافت نشد
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-
-              <div
-                className={`${
-                  tab === 3 ? styles.TicketMassageBox : styles.noneBox
-                }`}
-              >
-                <div className={styles.MassageBox}>
-                  {selectedTicket.length > 0 &&
-                    selectedTicket.map((ticket) => (
-                      <Massage key={ticket.ticket_id} tikectmsg={ticket} />
-                    ))}
-                  {showfile && (
-                    <div
-                      className="d-flex align-items-end mt-4 col-sm-12"
-                      style={{ direction: "rtl" }}
-                    >
-                      <div
-                        className="file-content"
-                        style={{ position: "relative" }}
-                      >
-                        <a className="place" href="#" target="blank" download>
-                          <BsFillFileEarmarkArrowDownFill className="fileIcon file-right" />
-                        </a>
-                        <div className="progress-upload">
-                          <div style={{ width: "55px", height: "55px" }}>
-                            <CircularProgressbar
-                              minValue={0}
-                              maxValue={100}
-                              value={uploadPercentage}
-                              strokeWidth={5}
-                              background={false}
-                              styles={{
-                                path: {
-                                  stroke: `#45ABE5`,
-                                },
-                                trail: {
-                                  stroke: "#ffffff",
-                                },
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div ref={messageEndRef} />
-                </div>
-
-                {ticket?.ticket_close ? (
-                  <>
-                    <div
-                      className={`${styles.wrapinpt_m_close} ${styles.close_ticket} d-flex align-items-center text-center`}
-                    >
-                      <span>تیکت بسته شد</span>
-                      <CiLock className={styles.lockicon} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.wrapinpt_m}>
-                      <div className={styles.file_wrapper}>
-                        <label htmlFor="file" className={styles.labelfile}>
-                          <MdAttachFile className={styles.fileicon_m} />
-                        </label>
-                        <input
-                          type="file"
-                          id="file"
-                          onChange={(e) => sendFile(e)}
-                          className={styles.input_tick}
-                        />
-                      </div>
-                      <div className={styles.input_ticket_wrap}>
-                        <input
-                          className={styles.input_ticket}
-                          type="text"
-                          value={textInput}
-                          onChange={(e) => setTextInput(e.target.value)}
-                        />
-                        <IoSend
-                          className={styles.iconsend}
-                          onClick={sendmessage}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
+          {isLoading ? (
+            <Loading />
           ) : (
             <>
-              <div className={styles.ButtonBox}>
-                <div
-                  className={`${styles.Button1} ${styles.activetab}`}
-                  onClick={() => {
-                    getAllTicket();
-                    setTab(1);
-                  }}
-                >
-                  <span>تیکت ها</span>
-                </div>
-              </div>
-              {tab === 1 && (
-                <div>
-                  {allTickets.length > 0 ? (
-                    <div className={styles.TicketListBox}>
-                      <div className={styles.text}>
-                        <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
-                        <span>تیکت‌های باز: {openTicket}</span>
-                      </div>
-                      <div className={styles.TicketItemBox}>
-                        {allTickets
-                          .slice()
-                          .reverse()
-                          .map((ticket) => (
-                            <TicketItem
-                              key={ticket.ticket_id}
-                              ticket={ticket}
-                              onClick={() => getSelectedTicket(ticket)}
-                              onCheckboxChange={handleTicketCloseChange}
-                            />
-                          ))}
-                      </div>
+              {windowWidth < 1025 ? (
+                <>
+                  <div className={styles.ButtonBox}>
+                    <div
+                      className={`${styles.Button} ${
+                        tab === 1 || tab === 3 ? styles.activetab : ""
+                      }`}
+                      onClick={() => setTab(1)}
+                    >
+                      <span>تیکت ها</span>
                     </div>
-                  ) : (
-                    <div className={styles.none_ticket}>
-                      <SlSocialDropbox className={styles.icon_ticket_none} />
-                      <p className={styles.ticket_text_none}>موردی یافت نشد</p>
+                  </div>
+                  {tab === 1 && (
+                    <div className={styles.allTickets}>
+                      {allTickets.length > 0 ? (
+                        <div className={styles.TicketListBox}>
+                          <div className={styles.text}>
+                            <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
+                            <span>تیکت‌های باز: {openTicket}</span>
+                          </div>
+                          <div className={styles.TicketItemBox}>
+                            {allTickets
+                              .slice()
+                              .reverse()
+                              .map((ticket) => (
+                                <TicketItem
+                                  key={ticket.ticket_id}
+                                  ticket={ticket}
+                                  onClick={() => getSelectedTicket(ticket)}
+                                  onCheckboxChange={handleTicketCloseChange}
+                                />
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className={styles.none_ticket}>
+                            <SlSocialDropbox
+                              className={styles.icon_ticket_none}
+                            />
+                            <p className={styles.ticket_text_none}>
+                              موردی یافت نشد
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
-                </div>
-              )}
-              <div
-                className={`${
-                  tab === 3 ? styles.TicketMassageBox : styles.noneBox
-                }`}
-              >
-                <div className={styles.MassageBox}>
-                  {selectedTicket.length > 0 &&
-                    selectedTicket.map((ticket) => (
-                      <Massage key={ticket.ticket_id} tikectmsg={ticket} />
-                    ))}
-                  {showfile && (
-                    <div
-                      className="d-flex align-items-end mt-4 col-sm-12 px-2"
-                      style={{ direction: "rtl" }}
-                    >
-                      <div
-                        className="file-content"
-                        style={{ position: "relative" }}
-                      >
-                        <a className="place" href="#" target="blank" download>
-                          <BsFillFileEarmarkArrowDownFill className="fileIcon file-right" />
-                        </a>
-                        <div className="progress-upload">
-                          <div style={{ width: "55px", height: "55px" }}>
-                            <CircularProgressbar
-                              minValue={0}
-                              maxValue={100}
-                              value={uploadPercentage}
-                              strokeWidth={5}
-                              background={false}
-                              styles={{
-                                path: {
-                                  stroke: `#45ABE5`,
-                                },
-                                trail: {
-                                  stroke: "#ffffff",
-                                },
-                              }}
+
+                  <div
+                    className={`${
+                      tab === 3 ? styles.TicketMassageBox : styles.noneBox
+                    }`}
+                  >
+                    <div className={styles.MassageBox}>
+                      {selectedTicket.length > 0 &&
+                        selectedTicket.map((ticket) => (
+                          <Massage key={ticket.ticket_id} tikectmsg={ticket} />
+                        ))}
+                      {showfile && (
+                        <div
+                          className="d-flex align-items-end mt-4 col-sm-12"
+                          style={{ direction: "rtl" }}
+                        >
+                          <div
+                            className="file-content"
+                            style={{ position: "relative" }}
+                          >
+                            <a
+                              className="place"
+                              href="#"
+                              target="blank"
+                              download
+                            >
+                              <BsFillFileEarmarkArrowDownFill className="fileIcon file-right" />
+                            </a>
+                            <div className="progress-upload">
+                              <div style={{ width: "55px", height: "55px" }}>
+                                <CircularProgressbar
+                                  minValue={0}
+                                  maxValue={100}
+                                  value={uploadPercentage}
+                                  strokeWidth={5}
+                                  background={false}
+                                  styles={{
+                                    path: {
+                                      stroke: `#45ABE5`,
+                                    },
+                                    trail: {
+                                      stroke: "#ffffff",
+                                    },
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      <div ref={messageEndRef} />
+                    </div>
+
+                    {ticket?.ticket_close ? (
+                      <>
+                        <div
+                          className={`${styles.wrapinpt_m_close} ${styles.close_ticket} d-flex align-items-center text-center`}
+                        >
+                          <span>تیکت بسته شد</span>
+                          <CiLock className={styles.lockicon} />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.wrapinpt_m}>
+                          <div className={styles.file_wrapper}>
+                            <label htmlFor="file" className={styles.labelfile}>
+                              <MdAttachFile className={styles.fileicon_m} />
+                            </label>
+                            <input
+                              type="file"
+                              id="file"
+                              onChange={(e) => sendFile(e)}
+                              className={styles.input_tick}
+                            />
+                          </div>
+                          <div className={styles.input_ticket_wrap}>
+                            <input
+                              className={styles.input_ticket}
+                              type="text"
+                              value={textInput}
+                              onChange={(e) => setTextInput(e.target.value)}
+                            />
+                            <IoSend
+                              className={styles.iconsend}
+                              onClick={sendmessage}
                             />
                           </div>
                         </div>
-                      </div>
+                      </>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.ButtonBox}>
+                    <div
+                      className={`${styles.Button1} ${styles.activetab}`}
+                      onClick={() => setTab(1)}
+                    >
+                      <span>تیکت ها</span>
+                    </div>
+                  </div>
+                  {tab === 1 && (
+                    <div>
+                      {allTickets.length > 0 ? (
+                        <div className={styles.TicketListBox}>
+                          <div className={styles.text}>
+                            <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
+                            <span>تیکت‌های باز: {openTicket}</span>
+                          </div>
+                          <div className={styles.TicketItemBox}>
+                            {allTickets
+                              .slice()
+                              .reverse()
+                              .map((ticket) => (
+                                <TicketItem
+                                  key={ticket.ticket_id}
+                                  ticket={ticket}
+                                  onClick={() => getSelectedTicket(ticket)}
+                                  onCheckboxChange={handleTicketCloseChange}
+                                />
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className={styles.none_ticket}>
+                          <SlSocialDropbox
+                            className={styles.icon_ticket_none}
+                          />
+                          <p className={styles.ticket_text_none}>
+                            موردی یافت نشد
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
-                  <div ref={messageEndRef} />
-                </div>
-                {ticket?.ticket_close ? (
-                  <>
-                    <div
-                      className={`${styles.input_message_p}  ${styles.close_ticket} d-flex align-items-center`}
-                    >
-                      <span>تیکت بسته شد</span>
-                      <CiLock className={styles.lockicon} />
+                  <div
+                    className={`${
+                      tab === 3 ? styles.TicketMassageBox : styles.noneBox
+                    }`}
+                  >
+                    <div className={styles.MassageBox}>
+                      {selectedTicket.length > 0 &&
+                        selectedTicket.map((ticket) => (
+                          <Massage key={ticket.ticket_id} tikectmsg={ticket} />
+                        ))}
+                      {showfile && (
+                        <div
+                          className="d-flex align-items-end mt-4 col-sm-12 px-2"
+                          style={{ direction: "rtl" }}
+                        >
+                          <div
+                            className="file-content"
+                            style={{ position: "relative" }}
+                          >
+                            <a
+                              className="place"
+                              href="#"
+                              target="blank"
+                              download
+                            >
+                              <BsFillFileEarmarkArrowDownFill className="fileIcon file-right" />
+                            </a>
+                            <div className="progress-upload">
+                              <div style={{ width: "55px", height: "55px" }}>
+                                <CircularProgressbar
+                                  minValue={0}
+                                  maxValue={100}
+                                  value={uploadPercentage}
+                                  strokeWidth={5}
+                                  background={false}
+                                  styles={{
+                                    path: {
+                                      stroke: `#45ABE5`,
+                                    },
+                                    trail: {
+                                      stroke: "#ffffff",
+                                    },
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      <div ref={messageEndRef} />
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <div className={styles.input_message_p}>
-                      <div className={styles.file_wrapper}>
-                        <label htmlFor="file" className={styles.labelfile}>
-                          <MdAttachFile className={styles.fileicon_m} />
-                        </label>
-                        <input
-                          type="file"
-                          id="file"
-                          onChange={(e) => sendFile(e)}
-                          className={styles.input_tick}
-                        />
-                      </div>
+                    {ticket?.ticket_close ? (
+                      <>
+                        <div
+                          className={`${styles.input_message_p}  ${styles.close_ticket} d-flex align-items-center`}
+                        >
+                          <span>تیکت بسته شد</span>
+                          <CiLock className={styles.lockicon} />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className={styles.input_message_p}>
+                          <div className={styles.file_wrapper}>
+                            <label htmlFor="file" className={styles.labelfile}>
+                              <MdAttachFile className={styles.fileicon_m} />
+                            </label>
+                            <input
+                              type="file"
+                              id="file"
+                              onChange={(e) => sendFile(e)}
+                              className={styles.input_tick}
+                            />
+                          </div>
 
-                      <div className={styles.input_ticket_wrap}>
-                        <input
-                          onKeyDown={handleKeyDown}
-                          className={styles.input_ticket}
-                          type="text"
-                          value={textInput}
-                          onChange={(e) => setTextInput(e.target.value)}
-                        />
-                        <IoSend
-                          className={styles.iconsend}
-                          onClick={sendmessage}
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
+                          <div className={styles.input_ticket_wrap}>
+                            <input
+                              onKeyDown={handleKeyDown}
+                              className={styles.input_ticket}
+                              type="text"
+                              value={textInput}
+                              onChange={(e) => setTextInput(e.target.value)}
+                            />
+                            <IoSend
+                              className={styles.iconsend}
+                              onClick={sendmessage}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>

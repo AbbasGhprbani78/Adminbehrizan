@@ -81,10 +81,7 @@ export default function Orders() {
     } catch (e) {
       if (e.response?.status === 401) {
         localStorage.removeItem("access");
-        
       }
-    } finally {
-      // setLoading(false);
     }
   };
 

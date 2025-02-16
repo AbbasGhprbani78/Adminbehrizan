@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "../../styles/Chat.module.css";
 import { IoSend } from "react-icons/io5";
 import ChatMessage from "../../components/module/ChatMesaage/ChatMessage";
@@ -9,14 +9,35 @@ import { Col } from "react-bootstrap";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import Loading from "../../components/module/Loading/Loading";
 import axios from "axios";
+import useSWR from "swr";
+const apiUrl = import.meta.env.VITE_API_URL;
 
+const fetcher = async (url) => {
+  const access = localStorage.getItem("access");
+  const headers = { Authorization: `Bearer ${access}` };
+
+  const response = await axios.get(url, { headers });
+  return response.data;
+};
+
+const useUsers = () => {
+  const { data, error } = useSWR(`${apiUrl}/chat/get-user-roomid/`, fetcher, {
+    dedupingInterval: 15 * 60 * 1000,
+    revalidateOnFocus: false,
+    refreshInterval: 15 * 60 * 1000,
+  });
+
+  return {
+    users: data || [],
+    isLoading: !error && !data,
+    isError: error,
+  };
+};
 export default function Chat() {
-  const apiUrl = import.meta.env.VITE_API_URL;
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [users, SetUsers] = useState([]);
   const [filtreduser, setFiltredusers] = useState([]);
   const [mainUser, setMainUser] = useState("");
   const socketRef = useRef(null);
@@ -25,7 +46,13 @@ export default function Chat() {
   const [loading, setIsLoading] = useState(false);
   const access_token = localStorage.getItem("access");
   const socketUrl = `wss://behrizanpanel.ariisco.com/ws/chat/?token=${access_token}&receiver_code=${mainUser.supplier_code}`;
-
+  const { users, isLoading, isError } = useUsers();
+  useEffect(() => {
+    if (users.length > 0) {
+      setFiltredusers(users);
+      setMainUser(users[0]?.supplier_code);
+    }
+  }, [users]);
   useEffect(() => {
     socketRef.current = new WebSocket(socketUrl);
 
@@ -63,26 +90,24 @@ export default function Chat() {
     };
   }, [socketUrl]);
 
-  const getUsers = async () => {
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
-    try {
-      const response = await axios.get(`${apiUrl}/chat/get-user-roomid/`, {
-        headers,
-      });
+  // const getUsers = async () => {
+  //   const access = localStorage.getItem("access");
+  //   const headers = {
+  //     Authorization: `Bearer ${access}`,
+  //   };
+  //   try {
+  //     const response = await axios.get(`${apiUrl}/chat/get-user-roomid/`, {
+  //       headers,
+  //     });
 
-      if (response.status === 200) {
-        console.log(response.data);
-        SetUsers(response.data);
-        setFiltredusers(response.data);
-        setMainUser(response.data[0].supplier_code);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //     if (response.status === 200) {
+  //       setFiltredusers(response.data);
+  //       setMainUser(response.data[0].supplier_code);
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const getMessages = async () => {
     setIsLoading(true);
@@ -161,10 +186,6 @@ export default function Chat() {
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   useEffect(() => {
     const handleWindowResize = () => {
