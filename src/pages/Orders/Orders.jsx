@@ -1,4 +1,4 @@
-import  { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "../../styles/Orders.module.css";
 import SideBar from "../../components/module/SideBar/SideBar";
 import Header from "../../components/module/Header/Header";
@@ -8,10 +8,7 @@ import axios from "axios";
 import NoneSearch from "../../components/module/NoneSearch/NoneSearch";
 import EmptyProduct from "../../components/module/EmptyProduct/EmptyProduct";
 import { useParams } from "react-router-dom";
-import {
-  addSlashesToDate,
-  convertToPersianNumbers,
-} from "../../utils/helper";
+import { addSlashesToDate, convertToPersianNumbers } from "../../utils/helper";
 import Loading from "../../components/module/Loading/Loading";
 import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
@@ -26,6 +23,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import useSWR from "swr";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 const StyledTableContainer = styled(TableContainer)({
   maxHeight: 400,
   "&::-webkit-scrollbar": {
@@ -51,6 +50,7 @@ export default function Orders() {
   const [isSearch, setIsSearch] = useState(false);
   const [openTableIndex, setOpenTableIndex] = useState(null);
   const [detailProduct, setDetailProduct] = useState([]);
+  const naviagte = useNavigate();
   const { id } = useParams();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -131,7 +131,6 @@ export default function Orders() {
   useEffect(() => {
     if (error?.response?.status === 401) {
       localStorage.removeItem("access");
-      
     }
   }, [error]);
 
@@ -156,18 +155,27 @@ export default function Orders() {
         ) : orderDetails.length > 0 ? (
           <>
             <div className={styles.wrap_tabs_btns}>
-              <button
-                className={`${styles.btn_tab} ${tab === 1 && styles.activetab}`}
-                onClick={() => setTab(1)}
-              >
-                سفارشات
-              </button>
-              <button
-                className={`${styles.btn_tab} ${tab === 2 && styles.activetab}`}
-                onClick={() => setTab(2)}
-              >
-                بارنامه
-              </button>
+              <div className="d-flex align-items-center gap-3">
+                <button
+                  className={`${styles.btn_tab} ${
+                    tab === 1 && styles.activetab
+                  }`}
+                  onClick={() => setTab(1)}
+                >
+                  سفارشات
+                </button>
+                <button
+                  className={`${styles.btn_tab} ${
+                    tab === 2 && styles.activetab
+                  }`}
+                  onClick={() => setTab(2)}
+                >
+                  وضعیت ارسالها
+                </button>
+              </div>
+              <span className={styles.arrow_icon} onClick={() => naviagte("/")}>
+                <FaArrowLeftLong />
+              </span>
             </div>
             {tab === 1 ? (
               <>
@@ -212,7 +220,7 @@ export default function Orders() {
                   tab === 2 && styles.tab2_style
                 }`}
               >
-                <p className={styles.bill_title}>لیست بارنامه ها</p>
+                <p className={styles.bill_title}>لیست وضعیت ارسالها ها</p>
                 <p className="mt-4">وضعیت ارسال ها :</p>
                 <div
                   style={{ height: "calc(100dvh - 250px)", overflow: "auto" }}
@@ -237,7 +245,7 @@ export default function Orders() {
                                   <FaAngleDown />
                                 )}
                               </div>
-                              <span>بارنامه : </span>
+                              <span>وضعیت ارسالها : </span>
                               <span>{convertToPersianNumbers(item?.bill)}</span>
                             </div>
                             <div className={styles.wrap_date_detail}>

@@ -66,8 +66,14 @@
 .wrap_tabs_btns {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     margin-top: 1.3rem;
+}
+
+.arrow_icon {
+    cursor: pointer;
+    color: var(--color-3);
+    font-size: 1.3rem;
 }
 
 .btn_tab {
@@ -128,6 +134,14 @@
         position: fixed;
         margin-top: 6rem;
         padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .arrow_icon {
+        position: fixed;
+        left: 20px;
     }
 
     .detailorderwrapper {
