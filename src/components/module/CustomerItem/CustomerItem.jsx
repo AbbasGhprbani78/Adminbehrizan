@@ -12,6 +12,7 @@ export default function CustomerItem({ setUserInfo, setShowModal, user, setId })
       username: user.username,
     }));
     setShowModal(true);
+    
   };
 
   return (
