@@ -25,6 +25,9 @@ import { styled } from "@mui/system";
 import useSWR from "swr";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const StyledTableContainer = styled(TableContainer)({
   maxHeight: 400,
   "&::-webkit-scrollbar": {
@@ -64,33 +67,20 @@ export default function Orders() {
   };
 
   const getDetails = async () => {
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
     try {
-      const response = await axios.get(
-        `${apiUrl}/app/order-detail-bill-code/${id}`,
-        {
-          headers,
-        }
-      );
+      const response = await apiClient.get(`/app/order-detail-bill-code/${id}`);
       if (response.status === 200) {
         setDetailProduct(response.data);
       }
     } catch (e) {
-      if (e.response?.status === 401) {
-        localStorage.removeItem("access");
-      }
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     }
   };
 
   const fetcher = async (url) => {
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
-    const response = await axios.get(url, { headers });
+    const response = await apiClient.get(url);
     if (response.status === 200) {
       setFilterProduct(response.data);
       return response.data;
@@ -101,7 +91,7 @@ export default function Orders() {
     data: orderDetails,
     error,
     isLoading,
-  } = useSWR(`${apiUrl}/app/get-product/${id}`, fetcher, {
+  } = useSWR(`/app/get-product/${id}`, fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 15 * 60 * 1000,
   });
@@ -407,6 +397,7 @@ export default function Orders() {
           </>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }

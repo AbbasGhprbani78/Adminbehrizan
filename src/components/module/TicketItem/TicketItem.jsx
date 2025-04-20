@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import styles from "./TicketItem.module.css";
 import { HiOutlineMailOpen } from "react-icons/hi";
 import { HiOutlineMail } from "react-icons/hi";
-import axios from "axios";
+import apiClient from "../../../config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
   const [windowWidth, setWindowWidth] = useState(0);
   const [isClose, setIsClose] = useState(ticket?.ticket_close);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -18,20 +19,17 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
     setIsClose(checked);
     onCheckboxChange(ticket.ticket_id, checked);
 
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
-
     const body = {
       ticket_id: ticket.ticket_id,
       close: checked,
     };
 
     try {
-      await axios.put(`${apiUrl}/app/ticket-admin/`, body, { headers });
+      await apiClient.put(`/app/ticket-admin/`, body);
     } catch (e) {
-      console.log(e);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     }
   };
 
@@ -108,6 +106,7 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
               </label>
             </div>
           </div>
+          <ToastContainer />
         </>
       )}
     </>

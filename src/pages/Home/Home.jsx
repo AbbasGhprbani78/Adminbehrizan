@@ -12,6 +12,8 @@ import ModalFilter from "../../components/module/ModalFilter/ModalFilter";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../../components/module/Loading/Loading";
 import LoadingInfity from "../../../../behrizanpanel/src/components/module/Loading/LoadingInfinity";
+import apiClient from "../../config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -30,18 +32,10 @@ export default function Home() {
   const getAllOrders = async (page = 1, page_size = 25) => {
     if (page === 1 && firstLoad) setLoading(true);
     if (page > 1) setIsFetchingMore(true);
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
     try {
-      const response = await axios.get(
-        `${apiUrl}/app/get-order-detail-admin/`,
-        {
-          headers,
-          params: { page, page_size },
-        }
-      );
+      const response = await apiClient.get(`/app/get-order-detail-admin/`, {
+        params: { page, page_size },
+      });
 
       if (response.status === 200) {
         setAllorders((prev) =>
@@ -62,9 +56,9 @@ export default function Home() {
         }
       }
     } catch (e) {
-      if (e.response?.status === 401) {
-        localStorage.removeItem("access");
-      }
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setLoading(false);
       setIsFetchingMore(false);
@@ -84,24 +78,18 @@ export default function Home() {
       convertToEnglishDigits(date).replace(/\//g, "");
     const startDateFormatted = formatDate(startDate);
     const endDateFormatted = formatDate(endDate);
-    const access = localStorage.getItem("access");
-    const headers = { Authorization: `Bearer ${access}` };
 
     if (page === 1) setIsSearch(true);
 
     try {
-      const response = await axios.get(
-        `${apiUrl}/app/get-order-detail-admin/`,
-        {
-          params: {
-            page,
-            page_size,
-            start_date: startDateFormatted,
-            end_date: endDateFormatted,
-          },
-          headers,
-        }
-      );
+      const response = await apiClient.get(`/app/get-order-detail-admin/`, {
+        params: {
+          page,
+          page_size,
+          start_date: startDateFormatted,
+          end_date: endDateFormatted,
+        },
+      });
 
       setSearch("");
 
@@ -119,7 +107,9 @@ export default function Home() {
         }
       }
     } catch (error) {
-      console.error("خطا در دریافت محصولات فیلتر شده:", error);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setIsSearch(false);
     }
@@ -130,17 +120,9 @@ export default function Home() {
     if (page === 1) setIsSearch(true);
 
     try {
-      const access = localStorage.getItem("access");
-      const headers = {
-        Authorization: `Bearer ${access}`,
-      };
-      const response = await axios.get(
-        `${apiUrl}/app/get-order-detail-admin/`,
-        {
-          params: { query, page, page_size },
-          headers,
-        }
-      );
+      const response = await apiClient.get(`/app/get-order-detail-admin/`, {
+        params: { query, page, page_size },
+      });
 
       if (response.status === 200) {
         const newResults =
@@ -158,9 +140,9 @@ export default function Home() {
         }
       }
     } catch (error) {
-      if (error.response?.status === 401) {
-        localStorage.removeItem("access");
-      }
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
@@ -269,6 +251,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

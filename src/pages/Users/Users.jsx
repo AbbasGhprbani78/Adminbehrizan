@@ -12,6 +12,9 @@ import { MdOutlineDone } from "react-icons/md";
 import swal from "sweetalert";
 import Loading from "../../components/module/Loading/Loading";
 import Switch from "@mui/material/Switch";
+import apiClient from "../../config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Users() {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -64,21 +67,16 @@ export default function Users() {
 
   const getAllUsers = async () => {
     setLoading(true);
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
     try {
-      const response = await axios.get(`${apiUrl}/user/users/`, {
-        headers,
-      });
+      const response = await apiClient.get(`${apiUrl}/user/users/`);
       if (response.status == 200) {
-        console.log(response.data);
         setAllUsers(response.data);
         setFiltredUsers(response.data);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setLoading(false);
     }
@@ -93,7 +91,10 @@ export default function Users() {
 
     try {
       setSubmitChange(true);
-      const response = await axios.put(`${apiUrl}/user/users/${id}`, userInfo);
+      const response = await apiClient.put(
+        `${apiUrl}/user/users/${id}`,
+        userInfo
+      );
       if (response.status === 200) {
         getAllUsers();
         setShowModal(false);
@@ -114,7 +115,9 @@ export default function Users() {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setSubmitChange(false);
     }
@@ -247,6 +250,7 @@ export default function Users() {
           </div>
         </form>
       </Modal>
+      <ToastContainer />
     </>
   );
 }

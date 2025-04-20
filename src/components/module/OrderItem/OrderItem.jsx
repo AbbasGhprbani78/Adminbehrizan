@@ -27,8 +27,6 @@ export default function OrderItem({ item }) {
     };
   }, []);
 
-  console.log(item);
-
   return (
     <>
       {windowWidth < 600 ? (

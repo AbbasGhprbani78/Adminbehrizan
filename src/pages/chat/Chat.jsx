@@ -8,20 +8,17 @@ import UserItem from "../../components/module/UserItem/UserItem";
 import { Col } from "react-bootstrap";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import Loading from "../../components/module/Loading/Loading";
-import axios from "axios";
 import useSWR from "swr";
-const apiUrl = import.meta.env.VITE_API_URL;
+import apiClient from "../../config/axiosConfig";
+import { ToastContainer, toast } from "react-toastify";
 
 const fetcher = async (url) => {
-  const access = localStorage.getItem("access");
-  const headers = { Authorization: `Bearer ${access}` };
-
-  const response = await axios.get(url, { headers });
+  const response = await apiClient.get(url);
   return response.data;
 };
 
 const useUsers = () => {
-  const { data, error } = useSWR(`${apiUrl}/chat/get-user-roomid/`, fetcher, {
+  const { data, error } = useSWR(`/chat/get-user-roomid/`, fetcher, {
     dedupingInterval: 15 * 60 * 1000,
     revalidateOnFocus: false,
     refreshInterval: 15 * 60 * 1000,
@@ -46,13 +43,14 @@ export default function Chat() {
   const [loading, setIsLoading] = useState(false);
   const access_token = localStorage.getItem("access");
   const socketUrl = `wss://behrizanpanel.ariisco.com/ws/chat/?token=${access_token}&receiver_code=${mainUser.supplier_code}`;
-  const { users, isLoading, isError } = useUsers();
+  const { users } = useUsers();
   useEffect(() => {
     if (users.length > 0) {
       setFiltredusers(users);
       setMainUser(users[0]?.supplier_code);
     }
   }, [users]);
+
   useEffect(() => {
     socketRef.current = new WebSocket(socketUrl);
 
@@ -90,35 +88,11 @@ export default function Chat() {
     };
   }, [socketUrl]);
 
-  // const getUsers = async () => {
-  //   const access = localStorage.getItem("access");
-  //   const headers = {
-  //     Authorization: `Bearer ${access}`,
-  //   };
-  //   try {
-  //     const response = await axios.get(`${apiUrl}/chat/get-user-roomid/`, {
-  //       headers,
-  //     });
-
-  //     if (response.status === 200) {
-  //       setFiltredusers(response.data);
-  //       setMainUser(response.data[0].supplier_code);
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   const getMessages = async () => {
     setIsLoading(true);
-    const headers = {
-      Authorization: `Bearer ${access_token}`,
-    };
-
     try {
-      const response = await axios.get(
-        `${apiUrl}/chat/get-message/${mainUser.supplier_code}`,
-        { headers }
+      const response = await apiClient.get(
+        `/chat/get-message/${mainUser.supplier_code}`
       );
 
       if (response.status === 200) {
@@ -126,7 +100,9 @@ export default function Chat() {
         setMessages(response.data);
       }
     } catch (e) {
-      console.log(e);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     }
   };
 
@@ -244,6 +220,7 @@ export default function Chat() {
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
                           onKeyDown={handleKeyDown}
+                          maxLength={400}
                         />
                         <IoSend
                           className={styles.icon_send}
@@ -265,6 +242,7 @@ export default function Chat() {
                           value={search}
                           onChange={searchHandler}
                           placeholder="جستوجو ..."
+                          maxLength={200}
                         />
                       </div>
                       <div className={styles.userContent}>
@@ -318,6 +296,7 @@ export default function Chat() {
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
+                        maxLength={200}
                       />
                       <IoSend
                         className={styles.icon_send}
@@ -335,6 +314,7 @@ export default function Chat() {
                         value={search}
                         onChange={searchHandler}
                         placeholder="جستوجو ..."
+                        maxLength={200}
                       />
                     </div>
                     <div className={styles.userContent}>
@@ -358,6 +338,26 @@ export default function Chat() {
           )}
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }
+
+// const getUsers = async () => {
+//   const access = localStorage.getItem("access");
+//   const headers = {
+//     Authorization: `Bearer ${access}`,
+//   };
+//   try {
+//     const response = await axios.get(`${apiUrl}/chat/get-user-roomid/`, {
+//       headers,
+//     });
+
+//     if (response.status === 200) {
+//       setFiltredusers(response.data);
+//       setMainUser(response.data[0].supplier_code);
+//     }
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };

@@ -7,7 +7,6 @@ import { SlSocialDropbox } from "react-icons/sl";
 import TicketItem from "../../components/module/TicketItem/TicketItem";
 import Massage from "../../components/module/Massage/Massage";
 import { IoSend } from "react-icons/io5";
-import axios from "axios";
 import swal from "sweetalert";
 import { MdAttachFile } from "react-icons/md";
 import { CircularProgressbar } from "react-circular-progressbar";
@@ -15,13 +14,12 @@ import { BsFillFileEarmarkArrowDownFill } from "react-icons/bs";
 import { CiLock } from "react-icons/ci";
 import Loading from "../../components/module/Loading/Loading";
 import useSWR from "swr";
-const apiUrl = import.meta.env.VITE_API_URL;
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import apiClient from "../../config/axiosConfig";
+
 const fetcher = async (url) => {
-  const access = localStorage.getItem("access");
-  const headers = {
-    Authorization: `Bearer ${access}`,
-  };
-  const response = await axios.get(url, { headers });
+  const response = await apiClient.get(url);
   if (response.status === 200) {
     return response.data.results;
   }
@@ -43,7 +41,7 @@ export default function Ticket() {
     data: allTickets,
     mutate,
     isLoading,
-  } = useSWR(`${apiUrl}/app/ticket-admin/`, fetcher, {
+  } = useSWR(`/app/ticket-admin/`, fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 15 * 60 * 1000,
   });
@@ -77,11 +75,6 @@ export default function Ticket() {
 
   const sendmessage = async () => {
     if (textInput.trim()) {
-      const access = localStorage.getItem("access");
-      const headers = {
-        Authorization: `Bearer ${access}`,
-      };
-
       const formData = new FormData();
       formData.append("message", textInput);
       formData.append("ticket_id", ticket.ticket_id);
@@ -98,13 +91,7 @@ export default function Ticket() {
       setSelectedTicket((prevMessages) => [...prevMessages, tempMessage]);
 
       try {
-        const response = await axios.post(
-          `${apiUrl}/chat/send-ticket/`,
-          formData,
-          {
-            headers,
-          }
-        );
+        const response = await apiClient.post(`/chat/send-ticket/`, formData);
 
         if (response.status === 201) {
           const newMessage = {
@@ -127,14 +114,15 @@ export default function Ticket() {
           setTextInput("");
         }
       } catch (e) {
-        console.log(e);
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
       }
     }
   };
 
   const sendFile = async (e) => {
     const maxSize = 1 * 1024 * 1024;
-    const access = localStorage.getItem("access");
     const fileMessage = e.target.files[0];
     if (fileMessage.size > maxSize) {
       swal(
@@ -152,24 +140,15 @@ export default function Ticket() {
     formData.append("is_admin", 1);
     formData.append("category", ticket.ticket_category);
 
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
-
     try {
-      const response = await axios.post(
-        `${apiUrl}/chat/send-ticket/`,
-        formData,
-        {
-          headers,
-          onUploadProgress: (progressEvent) => {
-            const progress = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setUploadPercentage(progress);
-          },
-        }
-      );
+      const response = await apiClient.post(`/chat/send-ticket/`, formData, {
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadPercentage(progress);
+        },
+      });
 
       if (response.status === 201) {
         setShowFile(false);
@@ -189,7 +168,9 @@ export default function Ticket() {
         });
       }
     } catch (e) {
-      console.log(e);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     }
   };
 
@@ -363,6 +344,7 @@ export default function Ticket() {
                               type="text"
                               value={textInput}
                               onChange={(e) => setTextInput(e.target.value)}
+                              maxLength={400}
                             />
                             <IoSend
                               className={styles.iconsend}
@@ -393,17 +375,14 @@ export default function Ticket() {
                             <span>تیکت‌های باز: {openTicket}</span>
                           </div>
                           <div className={styles.TicketItemBox}>
-                            {allTickets
-                              .slice()
-                              .reverse()
-                              .map((ticket) => (
-                                <TicketItem
-                                  key={ticket.ticket_id}
-                                  ticket={ticket}
-                                  onClick={() => getSelectedTicket(ticket)}
-                                  onCheckboxChange={handleTicketCloseChange}
-                                />
-                              ))}
+                            {allTickets.map((ticket) => (
+                              <TicketItem
+                                key={ticket.ticket_id}
+                                ticket={ticket}
+                                onClick={() => getSelectedTicket(ticket)}
+                                onCheckboxChange={handleTicketCloseChange}
+                              />
+                            ))}
                           </div>
                         </div>
                       ) : (
@@ -500,6 +479,7 @@ export default function Ticket() {
                               type="text"
                               value={textInput}
                               onChange={(e) => setTextInput(e.target.value)}
+                              maxLength={400}
                             />
                             <IoSend
                               className={styles.iconsend}
@@ -516,6 +496,7 @@ export default function Ticket() {
           )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

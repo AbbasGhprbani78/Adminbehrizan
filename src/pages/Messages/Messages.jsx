@@ -10,6 +10,7 @@ import swal from "sweetalert";
 import "react-toastify/dist/ReactToastify.css";
 import { Table } from "react-bootstrap";
 import { convertToPersianNumbers } from "../../utils/helper";
+import apiClient from "../../config/axiosConfig";
 
 export default function Messages() {
   const [tab, setTab] = useState(1);
@@ -45,20 +46,16 @@ export default function Messages() {
   };
 
   const getAllUsers = async () => {
-    const access = localStorage.getItem("access");
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
     try {
-      const response = await axios.get(`${apiUrl}/user/users/`, {
-        headers,
-      });
+      const response = await apiClient.get(`/user/users/`);
       if (response.status == 200) {
         setAllUsers(response.data);
         setFiltredUsers(response.data);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     }
   };
 
@@ -103,19 +100,9 @@ export default function Messages() {
       });
       return;
     }
-    const access = localStorage.getItem("access");
     setDisableBtn(true);
-    const headers = {
-      Authorization: `Bearer ${access}`,
-    };
     try {
-      const response = await axios.post(
-        `${apiUrl}/app/send-sms/`,
-        messageInfo,
-        {
-          headers,
-        }
-      );
+      const response = await apiClient.post(`/app/send-sms/`, messageInfo);
       if (response.status == 200) {
         swal({
           title: "پیام با موفقیت ارسال  شد",
@@ -130,7 +117,9 @@ export default function Messages() {
         });
       }
     } catch (error) {
-      console.log(error);
+      toast.error("مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
     } finally {
       setDisableBtn(false);
     }
@@ -331,6 +320,7 @@ export default function Messages() {
                     onChange={(e) => searchHandler(e.target.value)}
                     maxLength={200}
                     style={{ padding: "10px", border: "none", outline: "none" }}
+               
                   />
                 </div>
                 <div className={styles.list_users}>

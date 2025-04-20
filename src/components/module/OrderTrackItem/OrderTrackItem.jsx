@@ -83,7 +83,6 @@ export default function OrderTrackItem({ order, number }) {
     }
   }, [latestItem]);
 
-  console.log(order);
   return (
     <>
       <div className={styles.ordertrackitemwrapper}>

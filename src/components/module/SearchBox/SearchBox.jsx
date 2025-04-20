@@ -24,6 +24,7 @@ export default function SearchBox({ value, onChange, placeholder }) {
           onChange={handleInputChange}
           placeholder={placeholder}
           autoComplete="off"
+          maxLength={200}
         />
         <div className={styles.searhiconwrapper}>
           <RiSearch2Line className={styles.searchicon} />

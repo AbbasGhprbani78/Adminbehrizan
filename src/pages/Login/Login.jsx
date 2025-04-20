@@ -40,7 +40,6 @@ export default function Login() {
         toast.error(error.response?.data?.message || "An error occurred", {
           position: "top-left",
         });
-        console.log(error);
       }
     }
   };
@@ -61,7 +60,6 @@ export default function Login() {
           navigate("/");
         }
       } catch (error) {
-        console.log(error);
         toast.error(
           error.response?.data?.credential_error[0] || "An error occurred",
           {
@@ -161,7 +159,6 @@ export default function Login() {
                         setStep(2);
                       }
                     } catch (error) {
-                      console.log(error);
                       toast.error(error.response.data.message, {
                         position: "top-left",
                       });
@@ -248,7 +245,7 @@ export default function Login() {
                             toast.error(error.response.data.email[0], {
                               position: "top-left",
                             });
-                            console.log(error);
+
                             setSubmitting(false);
                           }
                         }}
@@ -413,7 +410,6 @@ export default function Login() {
                         setStep(2);
                       }
                     } catch (error) {
-                      console.log(error);
                       toast.error(error.response.data.non_field_errors[0], {
                         position: "top-left",
                       });
@@ -636,7 +632,7 @@ export default function Login() {
                               toast.error(error.response.data.email[0], {
                                 position: "top-left",
                               });
-                              console.log(error);
+
                               setSubmitting(false);
                             }
                           }}
@@ -807,7 +803,6 @@ export default function Login() {
                             setStep(2);
                           }
                         } catch (error) {
-                          console.log(error);
                           toast.error(error.response.data.non_field_errors[0], {
                             position: "top-left",
                           });
