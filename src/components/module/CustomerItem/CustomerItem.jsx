@@ -1,6 +1,11 @@
 import styles from "./CustomerItem.module.css";
 import { CiEdit } from "react-icons/ci";
-export default function CustomerItem({ setUserInfo, setShowModal, user, setId }) {
+export default function CustomerItem({
+  setUserInfo,
+  setShowModal,
+  user,
+  setId,
+}) {
   const fillUserInfo = () => {
     setId(user.supplier_code);
     setUserInfo((prev) => ({
@@ -10,9 +15,9 @@ export default function CustomerItem({ setUserInfo, setShowModal, user, setId })
       national_id: user.national_id,
       phone_number: user.phone_number,
       username: user.username,
+      is_active: user.is_active,
     }));
     setShowModal(true);
-    
   };
 
   return (

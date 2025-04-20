@@ -120,7 +120,7 @@ export default function Orders() {
             item?.product?.descriptions
               ?.toLowerCase()
               .includes(value.toLowerCase()) ||
-            String(item?.qty).includes(value)
+            String(item?.request_qty).includes(value)
         );
         setFilterProduct(filterSearch);
       }
@@ -152,7 +152,7 @@ export default function Orders() {
         <Header title={"سفارشات"} />
         {isLoading ? (
           <Loading />
-        ) : orderDetails.length > 0 ? (
+        ) : orderDetails?.length > 0 ? (
           <>
             <div className={styles.wrap_tabs_btns}>
               <div className="d-flex align-items-center gap-3">
@@ -191,7 +191,7 @@ export default function Orders() {
                   <SearchBox
                     value={search}
                     onChange={searchHandler}
-                    placeholder={"جستوجو براساس کد کالا , شرح , تعداد"}
+                    placeholder={"جستوجو براساس کد کالا , شرح , مقدار درخواست"}
                   />
                 </div>
                 <div className={`${styles.maincontent}`}>
@@ -298,7 +298,7 @@ export default function Orders() {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      تعداد
+                                      مقدار درخواست
                                     </TableCell>
                                     <TableCell
                                       align="center"
@@ -310,7 +310,7 @@ export default function Orders() {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      گنجایش واحد
+                                      مقدار سفارش
                                     </TableCell>
                                     <TableCell
                                       align="center"
@@ -322,7 +322,7 @@ export default function Orders() {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      مقدار کل
+                                      مقدار
                                     </TableCell>
                                   </TableRow>
                                 </TableHead>
@@ -359,7 +359,7 @@ export default function Orders() {
                                         }}
                                       >
                                         {convertToPersianNumbers(
-                                          rowDetail?.box_qty
+                                          rowDetail?.request_date
                                         )}
                                       </TableCell>
                                       <TableCell
@@ -370,7 +370,7 @@ export default function Orders() {
                                         }}
                                       >
                                         {convertToPersianNumbers(
-                                          rowDetail?.box_cap
+                                          rowDetail?.order_requset
                                         )}
                                       </TableCell>
                                       <TableCell

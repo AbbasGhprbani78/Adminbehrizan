@@ -83,6 +83,7 @@ export default function OrderTrackItem({ order, number }) {
     }
   }, [latestItem]);
 
+  console.log(order);
   return (
     <>
       <div className={styles.ordertrackitemwrapper}>
@@ -111,6 +112,10 @@ export default function OrderTrackItem({ order, number }) {
               </span>
             </div>
           </div>
+        </div>
+        <div className={styles.customer_name}>
+          <span className={styles.titlebold}> مشتری : </span>
+          <span style={{ fontSize: ".9rem" }}>{order?.user_full_name}</span>
         </div>
         <div className={`${styles.mapstatus} mt-4`}>
           <div className={styles.wrap_detail_icon}>

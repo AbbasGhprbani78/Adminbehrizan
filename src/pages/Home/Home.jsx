@@ -11,6 +11,7 @@ import EmptyProduct from "../../components/module/EmptyProduct/EmptyProduct";
 import ModalFilter from "../../components/module/ModalFilter/ModalFilter";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../../components/module/Loading/Loading";
+import LoadingInfity from "../../../../behrizanpanel/src/components/module/Loading/LoadingInfinity";
 
 export default function Home() {
   const [search, setSearch] = useState("");
@@ -23,10 +24,12 @@ export default function Home() {
   const isFetched = useRef(false);
   const [isSearch, setIsSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const getAllOrders = async (page = 1, page_size = 25) => {
     if (page === 1 && firstLoad) setLoading(true);
+    if (page > 1) setIsFetchingMore(true);
     const access = localStorage.getItem("access");
     const headers = {
       Authorization: `Bearer ${access}`,
@@ -64,6 +67,7 @@ export default function Home() {
       }
     } finally {
       setLoading(false);
+      setIsFetchingMore(false);
       if (firstLoad) setFirstLoad(false);
     }
   };
@@ -207,7 +211,9 @@ export default function Home() {
                   <SearchBox
                     value={search}
                     onChange={setSearch}
-                    placeholder={"جستوجو براساس شماره درخواست , تعداد سفارش"}
+                    placeholder={
+                      "جستوجو براساس شماره درخواست , تعداد سفارش , مشتری"
+                    }
                   />
                   <Filter setOpenmodal={setOpenmodal} all={resetOrders} />
                 </div>
@@ -217,7 +223,7 @@ export default function Home() {
                       <p className="text-search">در حال جستوجو ...</p>
                     ) : (
                       <InfiniteScroll
-                        dataLength={filterValue?.length}
+                        dataLength={filterValue?.length > 0 ? filterValue : []}
                         next={() => getAllOrders(page)}
                         hasMore={hasMore}
                         scrollableTarget="wrapp_orders"
@@ -238,6 +244,11 @@ export default function Home() {
                             <>
                               <NoneSearch />
                             </>
+                          )}
+                          {isFetchingMore && (
+                            <div className={styles.loadingContainer}>
+                              <LoadingInfity />
+                            </div>
                           )}
                         </div>
                       </InfiniteScroll>

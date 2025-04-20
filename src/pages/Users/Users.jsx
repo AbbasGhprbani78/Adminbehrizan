@@ -11,7 +11,9 @@ import Input from "../../components/module/Input/Input";
 import { MdOutlineDone } from "react-icons/md";
 import swal from "sweetalert";
 import Loading from "../../components/module/Loading/Loading";
+import Switch from "@mui/material/Switch";
 export default function Users() {
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   const apiUrl = import.meta.env.VITE_API_URL;
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +21,7 @@ export default function Users() {
   const [filtredUsers, setFiltredUsers] = useState([]);
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitChange, setSubmitChange] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: "",
     full_name: "",
@@ -26,6 +29,7 @@ export default function Users() {
     phone_number: "",
     username: "",
     password: "",
+    is_active: false,
   });
 
   const changeHnadler = (e) => {
@@ -33,6 +37,13 @@ export default function Users() {
     setUserInfo((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleToggleActive = (event) => {
+    setUserInfo((prev) => ({
+      ...prev,
+      is_active: event.target.checked,
     }));
   };
 
@@ -62,6 +73,7 @@ export default function Users() {
         headers,
       });
       if (response.status == 200) {
+        console.log(response.data);
         setAllUsers(response.data);
         setFiltredUsers(response.data);
       }
@@ -80,7 +92,7 @@ export default function Users() {
     e.preventDefault();
 
     try {
-      setLoading(true);
+      setSubmitChange(true);
       const response = await axios.put(`${apiUrl}/user/users/${id}`, userInfo);
       if (response.status === 200) {
         getAllUsers();
@@ -104,7 +116,7 @@ export default function Users() {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      setSubmitChange(false);
     }
   };
 
@@ -149,6 +161,23 @@ export default function Users() {
           </span>
         </div>
         <form onSubmit={chanageUserHandler} className={styles.edit_form}>
+          <div
+            className="my-2"
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+            }}
+          >
+            فعال
+            <Switch
+              {...label}
+              checked={userInfo?.is_active}
+              onChange={handleToggleActive}
+              color="warning"
+            />
+            غیر فعال
+          </div>
           <Input
             label="نام و نام خانوادگی"
             name="full_name"
@@ -200,18 +229,18 @@ export default function Users() {
           <div className={styles.wrap_actions}>
             <button
               className={`${styles.btn_form} ${styles.btn_submit} ${
-                loading && styles.disablebtn
+                submitChange && styles.disablebtn
               }`}
               type="submit"
-              disabled={loading}
+              disabled={submitChange}
             >
               تایید
               <MdOutlineDone className={styles.icon_don} />
             </button>
             <button
               className={`${styles.btn_form} ${styles.btn_close}`}
-              type="buttom"
               onClick={() => setShowModal(false)}
+              type="button"
             >
               لغو
             </button>

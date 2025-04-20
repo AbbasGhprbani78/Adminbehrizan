@@ -23,7 +23,7 @@ const fetcher = async (url) => {
   };
   const response = await axios.get(url, { headers });
   if (response.status === 200) {
-    return response.data;
+    return response.data.results;
   }
 };
 
@@ -47,31 +47,6 @@ export default function Ticket() {
     revalidateOnFocus: false,
     dedupingInterval: 15 * 60 * 1000,
   });
-
-  // const getAllTicket = async () => {
-  //   setLoading(true);
-  //   const access = localStorage.getItem("access");
-  //   const headers = {
-  //     Authorization: `Bearer ${access}`,
-  //   };
-
-  //   try {
-  //     const response = await axios.get(`${apiUrl}/app/ticket-admin/`, {
-  //       headers,
-  //     });
-
-  //     if (response.status === 200) {
-  //       console.log(response.data);
-  //       setAllTickets(response.data);
-  //     }
-  //   } catch (e) {
-  //     if (e.response?.status === 401) {
-  //       localStorage.removeItem("access");
-  //     }
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleTicketCloseChange = (ticketId, isChecked) => {
     if (!allTickets) return;
@@ -307,7 +282,6 @@ export default function Ticket() {
                       )}
                     </div>
                   )}
-
                   <div
                     className={`${
                       tab === 3 ? styles.TicketMassageBox : styles.noneBox

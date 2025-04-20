@@ -61,8 +61,9 @@ export default function Login() {
           navigate("/");
         }
       } catch (error) {
+        console.log(error);
         toast.error(
-          error.response?.data?.admin_error?.[0] || "An error occurred",
+          error.response?.data?.credential_error[0] || "An error occurred",
           {
             position: "top-left",
           }
@@ -160,6 +161,7 @@ export default function Login() {
                         setStep(2);
                       }
                     } catch (error) {
+                      console.log(error);
                       toast.error(error.response.data.message, {
                         position: "top-left",
                       });
@@ -548,7 +550,7 @@ export default function Login() {
                           setStep(2);
                         }
                       } catch (error) {
-                        toast.error(error.response.data.error, {
+                        toast.error(error.response.data.message, {
                           position: "top-left",
                         });
                         setSubmitting(false);

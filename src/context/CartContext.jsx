@@ -13,15 +13,14 @@ export function CountProvaider({ children }) {
 
     if (refresh) {
       const body = {
-        refresh_token: refresh,
+        refresh: refresh,
       };
 
       try {
         const response = await axios.post(`${apiUrl}/user/refresh/`, body);
 
         if (response.status === 200) {
-          localStorage.setItem("refresh", response.data.refresh_token);
-          // localStorage.setItem("access", response.data.access_token);
+          localStorage.setItem("access", response.data.access);
         }
       } catch (e) {
         if (e.response.status === 401) {

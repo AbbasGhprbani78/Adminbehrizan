@@ -1,68 +1,73 @@
 .wrapperpage {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .pagecontent {
-    width: 82%;
-    margin-right: 18%;
-    padding: 0 3%;
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    position: relative;
+  width: 82%;
+  margin-right: 18%;
+  padding: 0 3%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  position: relative;
 }
 
 .text_message {
-    color: #9f9f9f;
+  color: #9f9f9f;
 }
 
 .texteara {
-    width: 100%;
-    height: 30dvh;
-    resize: none;
-    border-radius: 5px;
-    overflow: hidden;
-    padding: 10px;
-    box-shadow: 0px 0px 4px 0px #00000040;
-    border: none;
-    outline: none;
+  width: 100%;
+  height: 30dvh;
+  resize: none;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 10px;
+  box-shadow: 0px 0px 4px 0px #00000040;
+  border: none;
+  outline: none;
 }
 
 .btn_message {
-    margin-top: 1.2rem;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    background-color: var(--color-3);
-    color: #374957;
-    padding: 6px 20px;
-    color: 17px;
+  margin-top: 1.2rem;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background-color: var(--color-3);
+  color: #374957;
+  padding: 6px 20px;
+  color: 17px;
+}
 
+.disable {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .top_list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f9f9f9;
 }
 
 .text_check_all {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .list_users {
-    max-height: calc(100dvh - 180px);
-    overflow-y: scroll;
+  max-height: calc(100dvh - 180px);
+  overflow-y: scroll;
 }
 
 .list_users_container {
-    border-radius: 20px 20px 0 0;
-    overflow: hidden;
-    background-color: #fff;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  background-color: #fff;
+  height: 80dvh;
 }
 
 .MuiGrid-root {
-    padding-top: 0 !important;
+  padding-top: 0 !important;
 }
