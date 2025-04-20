@@ -17,18 +17,16 @@ import useSWR from "swr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiClient from "../../config/axiosConfig";
-
-const fetcher = async (url) => {
-  const response = await apiClient.get(url);
-  if (response.status === 200) {
-    return response.data.results;
-  }
-};
-
+import SearchBox from "../../../../behrizanpanel/src/components/module/SearchBox/SearchBox";
+import Filter from "../../../../behrizanpanel/src/components/module/Filter/Filter";
+import ModalFilter from "../../../../behrizanpanel/src/components/module/ModalFilter/ModalFilter";
+import InfiniteScroll from "react-infinite-scroll-component";
+import LoadingInfity from "../../../../behrizanpanel/src/components/module/Loading/LoadingInfinity";
+import NoneSearch from "../../../../behrizanpanel/src/components/module/NoneSearch/NoneSearch";
 export default function Ticket() {
   const [tab, setTab] = useState(1);
   const [windowWidth, setWindowWidth] = useState(0);
-  // const [allTickets, setAllTickets] = useState([]);
+  const [allTickets, setAllTickets] = useState([]);
   const [openTicket, setOpenTicket] = useState(0);
   const [selectedTicket, setSelectedTicket] = useState([]);
   const [textInput, setTextInput] = useState("");
@@ -36,15 +34,228 @@ export default function Ticket() {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const messageEndRef = useRef(null);
   const [showfile, setShowFile] = useState(false);
+  const [openModal, setOpenmodal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filterValue, setFilterValue] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const [isSearch, setIsSearch] = useState(false);
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const {
-    data: allTickets,
-    mutate,
-    isLoading,
-  } = useSWR(`/app/ticket-admin/`, fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 15 * 60 * 1000,
-  });
+  const getAllTickets = async (page = 1, page_size = 10) => {
+    if (page === 1 && firstLoad) setLoading(true);
+    if (page > 1) setIsFetchingMore(true);
+
+    try {
+      const response = await apiClient.get("/app/ticket-admin/", {
+        params: { page, page_size },
+      });
+
+      if (response.status === 200) {
+        setAllTickets((prev) =>
+          page === 1
+            ? response.data.results
+            : [...prev, ...response.data.results]
+        );
+        setFilterValue((prev) =>
+          page === 1
+            ? response.data.results
+            : [...prev, ...response.data.results]
+        );
+
+        if (response.data.results.length < page_size) {
+          setHasMore(false);
+        } else {
+          setPage(page + 1);
+        }
+      }
+    } catch (e) {
+      if (e.response?.status === 500) {
+        toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
+    } finally {
+      setLoading(false);
+      setIsFetchingMore(false);
+      if (firstLoad) setFirstLoad(false);
+    }
+  };
+
+  const filterTicketsByDate = async (
+    startDate,
+    endDate,
+    page = 1,
+    page_size = 10
+  ) => {
+    const convertToEnglishDigits = (str) =>
+      str.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+
+    const formatDate = (date) =>
+      convertToEnglishDigits(date).replace(/\//g, "").replace(/-/g, "");
+
+    const startDateFormatted = formatDate(startDate);
+    const endDateFormatted = formatDate(endDate);
+
+    if (page === 1) setIsSearch(true);
+
+    try {
+      const response = await apiClient.get("/app/ticket-admin/", {
+        params: {
+          page,
+          page_size,
+          start_date: startDateFormatted,
+          end_date: endDateFormatted,
+        },
+      });
+
+      setSearch("");
+
+      if (response.status === 200) {
+        setFilterValue((prev) =>
+          page === 1
+            ? response.data.results
+            : [...prev, ...response.data.results]
+        );
+
+        if (response.data.results.length < page_size) {
+          setHasMore(false);
+        } else {
+          setPage(page + 1);
+        }
+      }
+    } catch (e) {
+      if (e.response?.status === 500) {
+        toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
+    } finally {
+      setIsSearch(false);
+    }
+  };
+
+  const filterTicketsByStatus = async (status, page = 1, page_size = 10) => {
+    if (page === 1) setIsSearch(true);
+
+    try {
+      const response = await apiClient.get("/app/ticket-admin/", {
+        params: {
+          page,
+          page_size,
+          close: status,
+        },
+      });
+
+      setSearch("");
+
+      if (response.status === 200) {
+        console.log(response.data.results);
+
+        setFilterValue((prev) =>
+          page === 1
+            ? response.data?.results
+            : [...prev, ...response.data.results]
+        );
+
+        if (response.data.results.length < page_size) {
+          setHasMore(false);
+        } else {
+          setPage(page + 1);
+        }
+      }
+    } catch (e) {
+      toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
+    } finally {
+      setIsSearch(false);
+    }
+  };
+
+  const filterTicketsByCategory = async (
+    category,
+    page = 1,
+    page_size = 10
+  ) => {
+    if (page === 1) setIsSearch(true);
+    try {
+      const response = await apiClient.get("/app/ticket-admin/", {
+        params: {
+          page,
+          page_size,
+          category,
+        },
+      });
+
+      setSearch("");
+      if (response.status === 200) {
+        setFilterValue((prev) =>
+          page === 1
+            ? response.data?.results
+            : [...prev, ...response.data.results]
+        );
+
+        if (response.data.results.length < page_size) {
+          setHasMore(false);
+        } else {
+          setPage(page + 1);
+        }
+      }
+    } catch (e) {
+      toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
+        position: "top-left",
+      });
+    } finally {
+      setIsSearch(false);
+    }
+  };
+
+  const searchTickets = async (query, page = 1, page_size = 10) => {
+    if (!query.trim()) return;
+
+    if (page === 1) setIsSearch(true);
+
+    try {
+      const response = await apiClient.get("/app/ticket-admin/", {
+        params: { ticket_id: query, page, page_size },
+      });
+
+      if (response.status === 200) {
+        const newResults =
+          Array.isArray(response.data) && response.data.length === 0
+            ? []
+            : response.data?.results || [];
+
+        setFilterValue((prev) =>
+          page === 1 ? newResults : [...prev, ...newResults]
+        );
+
+        if (response.data.results.length < page_size) {
+          setHasMore(false);
+        } else {
+          setPage(page + 1);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error(e.response?.data?.erorr, {
+        position: "top-left",
+      });
+    } finally {
+      setIsSearch(false);
+      if (firstLoad) setFirstLoad(false);
+    }
+  };
+
+  const resetTickets = () => {
+    setFilterValue(allTickets);
+    setPage(1);
+    setHasMore(true);
+  };
 
   const handleTicketCloseChange = (ticketId, isChecked) => {
     if (!allTickets) return;
@@ -181,6 +392,22 @@ export default function Ticket() {
     }
   };
 
+  const getUserType = async () => {
+    try {
+      const response = await apiClient.get("/chat/get-user-type/");
+
+      if (response.status === 200) {
+        setUserType(response?.data);
+      }
+    } catch (e) {
+      if (e.response?.status === 500) {
+        toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     const updateWindowWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -195,6 +422,27 @@ export default function Ticket() {
   }, []);
 
   useEffect(() => {
+    getAllTickets();
+    getUserType();
+  }, []);
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilterValue(allTickets);
+      setPage(1);
+      setHasMore(true);
+      return;
+    }
+    setPage(1);
+    setHasMore(true);
+    const delayDebounceFn = setTimeout(() => {
+      searchTickets(search.trim(), 1);
+    }, 1500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search]);
+
+  useEffect(() => {
     const allOpenTicket = allTickets?.filter(
       (ticket) => ticket?.ticket_close == false
     );
@@ -205,13 +453,15 @@ export default function Ticket() {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedTicket]);
 
+  console.log(filterValue);
+
   return (
     <div className={styles.wrapperpage}>
       <SideBar />
       <div className={styles.pagecontent}>
         <Header title={"تیکت ها"} />
         <div className={styles.maincontent}>
-          {isLoading ? (
+          {loading ? (
             <Loading />
           ) : (
             <>
@@ -367,35 +617,106 @@ export default function Ticket() {
                     </div>
                   </div>
                   {tab === 1 && (
-                    <div>
-                      {allTickets.length > 0 ? (
-                        <div className={styles.TicketListBox}>
-                          <div className={styles.text}>
-                            <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
-                            <span>تیکت‌های باز: {openTicket}</span>
+                    <>
+                      <div className={styles.topsec}>
+                        <SearchBox
+                          value={search}
+                          onChange={setSearch}
+                          placeholder={"جستوجو براساس شماره تیکت"}
+                        />
+                        <Filter
+                          setOpenmodal={setOpenmodal}
+                          all={resetTickets}
+                          filters={[
+                            {
+                              label: "وضعیت",
+
+                              submenuItems: [
+                                {
+                                  label: "باز",
+                                  onClick: () => filterTicketsByStatus(false),
+                                },
+                                {
+                                  label: "بسته",
+                                  onClick: () => filterTicketsByStatus(true),
+                                },
+                              ],
+                            },
+                            {
+                              label: "نوع تیکت",
+                              onClick: () => console.log("filter by status"),
+                              submenuItems: userType.map((item) => ({
+                                label: item.name,
+                                onClick: () =>
+                                  filterTicketsByCategory(item?.id),
+                              })),
+                            },
+                          ]}
+                        />
+                      </div>
+                      <div>
+                        {allTickets.length > 0 ? (
+                          <div className={styles.TicketListBox}>
+                            <div className={styles.text}>
+                              <span>
+                                تعداد کل تیکت‌ها: {allTickets.length} 
+                              </span>
+                              <span>تیکت‌های باز: {openTicket}</span>
+                            </div>
+                            {isSearch ? (
+                              <p className="text-search">در حال جستوجو ...</p>
+                            ) : (
+                              <InfiniteScroll
+                                dataLength={
+                                  filterValue?.length > 0 ? filterValue : []
+                                }
+                                next={() => getAllTickets(page)}
+                                hasMore={hasMore}
+                                scrollableTarget="wrapp_orders"
+                              >
+                                <div
+                                  className={styles.TicketItemBox}
+                                  id="wrapp_orders"
+                                >
+                                  {filterValue?.length > 0 ? (
+                                    <>
+                                      {filterValue.map((ticket) => (
+                                        <TicketItem
+                                          key={ticket.ticket_id}
+                                          ticket={ticket}
+                                          onClick={() =>
+                                            getSelectedTicket(ticket)
+                                          }
+                                          onCheckboxChange={
+                                            handleTicketCloseChange
+                                          }
+                                        />
+                                      ))}
+                                    </>
+                                  ) : (
+                                    <NoneSearch />
+                                  )}
+                                  {isFetchingMore && (
+                                    <div className={styles.loadingContainer}>
+                                      <LoadingInfity />
+                                    </div>
+                                  )}
+                                </div>
+                              </InfiniteScroll>
+                            )}
                           </div>
-                          <div className={styles.TicketItemBox}>
-                            {allTickets.map((ticket) => (
-                              <TicketItem
-                                key={ticket.ticket_id}
-                                ticket={ticket}
-                                onClick={() => getSelectedTicket(ticket)}
-                                onCheckboxChange={handleTicketCloseChange}
-                              />
-                            ))}
+                        ) : (
+                          <div className={styles.none_ticket}>
+                            <SlSocialDropbox
+                              className={styles.icon_ticket_none}
+                            />
+                            <p className={styles.ticket_text_none}>
+                              موردی یافت نشد
+                            </p>
                           </div>
-                        </div>
-                      ) : (
-                        <div className={styles.none_ticket}>
-                          <SlSocialDropbox
-                            className={styles.icon_ticket_none}
-                          />
-                          <p className={styles.ticket_text_none}>
-                            موردی یافت نشد
-                          </p>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    </>
                   )}
                   <div
                     className={`${
@@ -496,6 +817,12 @@ export default function Ticket() {
           )}
         </div>
       </div>
+      <ModalFilter
+        openModal={openModal}
+        setOpenmodal={setOpenmodal}
+        filterOrdersByDate={filterTicketsByDate}
+        isenglish={true}
+      />
       <ToastContainer />
     </div>
   );
