@@ -5,6 +5,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import apiClient from "../../../config/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { convertToPersianNumbers } from "../../../utils/helper";
 export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
   const [windowWidth, setWindowWidth] = useState(0);
   const [isClose, setIsClose] = useState(ticket?.ticket_close);
@@ -57,15 +58,16 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
               ) : (
                 <HiOutlineMailOpen className={styles.ticketicon} />
               )}
-              <div className="">
-                <span className="fw-bold">
-                  {ticket?.ticket_informations[0]?.title}
-                </span>
-              </div>
+              <span className={styles.number_ticket}>
+                {convertToPersianNumbers(ticket.ticket_id)}_
+              </span>
+              <span className="fw-bold">
+                {ticket?.ticket_informations[0]?.title}
+              </span>
             </div>
 
             <div className="d-flex justify-content-between align-items-center mt-4">
-              <span>{formatDate(ticket?.ticket_informations[0]?.date)}</span>
+              <span>{formatDate(ticket?.ticket_date)}</span>
               <label className={styles.custom_checkbox}>
                 <input
                   type="checkbox"
@@ -88,12 +90,15 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
               ) : (
                 <HiOutlineMailOpen className={styles.ticketicon} />
               )}
+              <span className={styles.number_ticket}>
+                {convertToPersianNumbers(ticket.ticket_id)}_
+              </span>
               <span className="fw-bold">
                 {ticket?.ticket_informations[0]?.title}
               </span>
             </div>
             <div className={styles.wrapper_left_ticket}>
-              <span>{formatDate(ticket?.ticket_informations[0]?.date)}</span>
+              <span>{formatDate(ticket?.ticket_date)}</span>
               <label className={styles.custom_checkbox}>
                 <input
                   type="checkbox"

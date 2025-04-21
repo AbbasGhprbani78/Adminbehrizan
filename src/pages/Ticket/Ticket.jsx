@@ -13,7 +13,6 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import { BsFillFileEarmarkArrowDownFill } from "react-icons/bs";
 import { CiLock } from "react-icons/ci";
 import Loading from "../../components/module/Loading/Loading";
-import useSWR from "swr";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apiClient from "../../config/axiosConfig";
@@ -115,6 +114,7 @@ export default function Ticket() {
       setSearch("");
 
       if (response.status === 200) {
+        console.log(response.data);
         setFilterValue((prev) =>
           page === 1
             ? response.data.results
@@ -241,7 +241,6 @@ export default function Ticket() {
         }
       }
     } catch (e) {
-      console.log(e);
       toast.error(e.response?.data?.erorr, {
         position: "top-left",
       });
@@ -260,15 +259,13 @@ export default function Ticket() {
   const handleTicketCloseChange = (ticketId, isChecked) => {
     if (!allTickets) return;
 
-    mutate(
-      (prevTickets) =>
-        prevTickets?.map((ticket) =>
-          ticket.ticket_id === ticketId
-            ? { ...ticket, ticket_close: isChecked }
-            : ticket
-        ) || [],
-      false
-    );
+    (prevTickets) =>
+      prevTickets?.map((ticket) =>
+        ticket.ticket_id === ticketId
+          ? { ...ticket, ticket_close: isChecked }
+          : ticket
+      ) || [],
+      false;
 
     const newOpenTicketCount =
       allTickets.filter(
@@ -478,40 +475,105 @@ export default function Ticket() {
                     </div>
                   </div>
                   {tab === 1 && (
-                    <div className={styles.allTickets}>
-                      {allTickets.length > 0 ? (
-                        <div className={styles.TicketListBox}>
-                          <div className={styles.text}>
-                            <span>تعداد کل تیکت‌ها: {allTickets.length} </span>
-                            <span>تیکت‌های باز: {openTicket}</span>
+                    <>
+                      <div className={styles.topsec}>
+                        <SearchBox
+                          value={search}
+                          onChange={setSearch}
+                          placeholder={"جستوجو براساس شماره تیکت"}
+                        />
+                        <Filter
+                          setOpenmodal={setOpenmodal}
+                          all={resetTickets}
+                          filters={[
+                            {
+                              label: "وضعیت",
+
+                              submenuItems: [
+                                {
+                                  label: "باز",
+                                  onClick: () => filterTicketsByStatus(false),
+                                },
+                                {
+                                  label: "بسته",
+                                  onClick: () => filterTicketsByStatus(true),
+                                },
+                              ],
+                            },
+                            {
+                              label: "نوع تیکت",
+                              onClick: () => console.log("filter by status"),
+                              submenuItems: userType.map((item) => ({
+                                label: item.name,
+                                onClick: () =>
+                                  filterTicketsByCategory(item?.id),
+                              })),
+                            },
+                          ]}
+                        />
+                      </div>
+                      <div className={styles.allTickets}>
+                        {allTickets.length > 0 ? (
+                          <div className={styles.TicketListBox}>
+                            <div className={styles.text}>
+                              <span>
+                                تعداد کل تیکت‌ها: {allTickets.length} 
+                              </span>
+                              <span>تیکت‌های باز: {openTicket}</span>
+                            </div>
+                            {isSearch ? (
+                              <p className="text-search">در حال جستوجو ...</p>
+                            ) : (
+                              <>
+                                <InfiniteScroll
+                                  dataLength={
+                                    filterValue?.length > 0 ? filterValue : []
+                                  }
+                                  next={() => getAllTickets(page)}
+                                  hasMore={hasMore}
+                                  scrollableTarget="wrapp_orders"
+                                >
+                                  <div
+                                    className={styles.TicketItemBox}
+                                    id="wrapp_orders"
+                                  >
+                                    {filterValue?.length > 0 ? (
+                                      <>
+                                        {filterValue.map((ticket) => (
+                                          <TicketItem
+                                            key={ticket.ticket_id}
+                                            ticket={ticket}
+                                            onClick={() =>
+                                              getSelectedTicket(ticket)
+                                            }
+                                            onCheckboxChange={
+                                              handleTicketCloseChange
+                                            }
+                                          />
+                                        ))}
+                                      </>
+                                    ) : (
+                                      <NoneSearch />
+                                    )}
+                                  </div>
+                                </InfiniteScroll>
+                              </>
+                            )}
                           </div>
-                          <div className={styles.TicketItemBox}>
-                            {allTickets
-                              .slice()
-                              .reverse()
-                              .map((ticket) => (
-                                <TicketItem
-                                  key={ticket.ticket_id}
-                                  ticket={ticket}
-                                  onClick={() => getSelectedTicket(ticket)}
-                                  onCheckboxChange={handleTicketCloseChange}
-                                />
-                              ))}
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className={styles.none_ticket}>
-                            <SlSocialDropbox
-                              className={styles.icon_ticket_none}
-                            />
-                            <p className={styles.ticket_text_none}>
-                              موردی یافت نشد
-                            </p>
-                          </div>
-                        </>
-                      )}
-                    </div>
+                        ) : (
+                          <>
+                            <div className={styles.none_ticket}>
+                              <SlSocialDropbox
+                                className={styles.icon_ticket_none}
+                              />
+                              <p className={styles.ticket_text_none}>
+                                موردی یافت نشد
+                              </p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </>
                   )}
                   <div
                     className={`${

@@ -27,7 +27,6 @@ export default function Home() {
   const [isSearch, setIsSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const getAllOrders = async (page = 1, page_size = 25) => {
     if (page === 1 && firstLoad) setLoading(true);

@@ -4,7 +4,6 @@ import SideBar from "../../components/module/SideBar/SideBar";
 import Header from "../../components/module/Header/Header";
 import OrderItem from "../../components/module/OrderItem/OrderItem";
 import SearchBox from "../../components/module/SearchBox/SearchBox";
-import axios from "axios";
 import NoneSearch from "../../components/module/NoneSearch/NoneSearch";
 import EmptyProduct from "../../components/module/EmptyProduct/EmptyProduct";
 import { useParams } from "react-router-dom";
@@ -55,21 +54,16 @@ export default function Orders() {
   const [detailProduct, setDetailProduct] = useState([]);
   const naviagte = useNavigate();
   const { id } = useParams();
-  const apiUrl = import.meta.env.VITE_API_URL;
 
   const toggleTable = (index) => {
     setOpenTableIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("fa-IR");
   };
 
   const getDetails = async () => {
     try {
       const response = await apiClient.get(`/app/order-detail-bill-code/${id}`);
       if (response.status === 200) {
+        console.log(response.data);
         setDetailProduct(response.data);
       }
     } catch (e) {
@@ -87,14 +81,14 @@ export default function Orders() {
     }
   };
 
-  const {
-    data: orderDetails,
-    error,
-    isLoading,
-  } = useSWR(`/app/get-product/${id}`, fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 15 * 60 * 1000,
-  });
+  const { data: orderDetails, isLoading } = useSWR(
+    `/app/get-product/${id}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 15 * 60 * 1000,
+    }
+  );
 
   const searchHandler = useCallback(
     (value) => {
@@ -117,12 +111,6 @@ export default function Orders() {
     },
     [orderDetails]
   );
-
-  useEffect(() => {
-    if (error?.response?.status === 401) {
-      localStorage.removeItem("access");
-    }
-  }, [error]);
 
   useEffect(() => {
     getDetails();
@@ -192,7 +180,7 @@ export default function Orders() {
                       <div className={styles.orderitemcontainer}>
                         {filterProduct?.length > 0 ? (
                           filterProduct.map((item) => (
-                            <OrderItem key={item.item_code} item={item} />
+                            <OrderItem key={item.order_detail_id} item={item} />
                           ))
                         ) : (
                           <>
@@ -211,16 +199,12 @@ export default function Orders() {
                 }`}
               >
                 <p className={styles.bill_title}>لیست وضعیت ارسالها ها</p>
-                <p className="mt-4">وضعیت ارسال ها :</p>
                 <div
                   style={{ height: "calc(100dvh - 250px)", overflow: "auto" }}
                 >
                   {detailProduct?.length > 0 &&
                     detailProduct.map((item, i) => (
-                      <div
-                        className={styles.detail_orders_wrap}
-                        key={item.bill}
-                      >
+                      <div className={styles.detail_orders_wrap} key={i}>
                         <div className={styles.status_send}>
                           <div className={styles.bilLading_date_wrap}>
                             <div
@@ -235,13 +219,39 @@ export default function Orders() {
                                   <FaAngleDown />
                                 )}
                               </div>
-                              <span>وضعیت ارسالها : </span>
+                              <span>بارنامه : </span>
                               <span>{convertToPersianNumbers(item?.bill)}</span>
                             </div>
-                            <div className={styles.wrap_date_detail}>
-                              <span>تاریخ : </span>
-                              <span>{formatDate(item?.deliver_date)}</span>
+                            <div>
+                              <span>شماره تراکنش : </span>
+                              <span>{item?.trans_doc_no}</span>
                             </div>
+                            <div>
+                              <span> نوع : </span>
+                              <span
+                                className={`${
+                                  item?.trans_type === "33"
+                                    ? styles.green_trans
+                                    : styles.red_trans
+                                }`}
+                              >
+                                {item?.trans_type === "33"
+                                  ? "ارسال شده"
+                                  : "برگشتی"}
+                              </span>
+                            </div>
+                          </div>
+                          <div className={styles.wrap_date_detail}>
+                            <span> تاریخ : </span>
+                            <p
+                              style={{
+                                direction: "ltr",
+                                marginBottom: "0",
+                                marginRight: "5px",
+                              }}
+                            >
+                              {convertToPersianNumbers(item?.trans_doc_date)}
+                            </p>
                           </div>
                         </div>
                         {openTableIndex === i && (
@@ -277,30 +287,6 @@ export default function Orders() {
                                       }}
                                     >
                                       شرح محصول
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        backgroundColor: "#fff",
-                                        fontFamily: "iranYekan",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      مقدار درخواست
-                                    </TableCell>
-                                    <TableCell
-                                      align="center"
-                                      style={{
-                                        position: "sticky",
-                                        top: 0,
-                                        backgroundColor: "#fff",
-                                        fontFamily: "iranYekan",
-                                        fontWeight: "bold",
-                                      }}
-                                    >
-                                      مقدار سفارش
                                     </TableCell>
                                     <TableCell
                                       align="center"
@@ -349,29 +335,7 @@ export default function Orders() {
                                         }}
                                       >
                                         {convertToPersianNumbers(
-                                          rowDetail?.request_date
-                                        )}
-                                      </TableCell>
-                                      <TableCell
-                                        align="center"
-                                        sx={{
-                                          fontFamily: "iranYekan",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        {convertToPersianNumbers(
-                                          rowDetail?.order_requset
-                                        )}
-                                      </TableCell>
-                                      <TableCell
-                                        align="center"
-                                        sx={{
-                                          fontFamily: "iranYekan",
-                                          fontWeight: "bold",
-                                        }}
-                                      >
-                                        {convertToPersianNumbers(
-                                          rowDetail?.qty
+                                          rowDetail?.trans_qty
                                         )}
                                       </TableCell>
                                     </TableRow>

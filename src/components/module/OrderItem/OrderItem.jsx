@@ -70,6 +70,10 @@ export default function OrderItem({ item }) {
                 <span className={styles.infoitem}>وضعیت</span>
                 <span>{item?.order_item_status_code}</span>
               </div>
+              <div className={styles.cartinfoitem}>
+                <span className={styles.infoitem}>مقدار ارسال شده</span>
+                <span>{item?.sent_qty}</span>
+              </div>
             </div>
           </div>
         </>
@@ -144,7 +148,30 @@ export default function OrderItem({ item }) {
                       >
                         وضعیت
                       </TableCell>
-
+                      <TableCell
+                        align="center"
+                        style={{
+                          position: "sticky",
+                          top: 0,
+                          backgroundColor: "#fff",
+                          fontFamily: "iranYekan",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        مقدار ارسال شده
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          position: "sticky",
+                          top: 0,
+                          backgroundColor: "#fff",
+                          fontFamily: "iranYekan",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        وضعیت
+                      </TableCell>
                       <TableCell
                         align="center"
                         style={{
@@ -198,6 +225,12 @@ export default function OrderItem({ item }) {
                         sx={{ fontFamily: "iranYekan", fontWeight: "bold" }}
                       >
                         {item?.order_item_status_code}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ fontFamily: "iranYekan", fontWeight: "bold" }}
+                      >
+                        {item?.sent_qty}
                       </TableCell>
                       <TableCell
                         align="center"
