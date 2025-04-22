@@ -183,6 +183,7 @@ export default function Messages() {
     } finally {
       setLoading(false);
       setIsFetchingMore(false);
+      setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
     }
   };
@@ -191,6 +192,7 @@ export default function Messages() {
     if (!query.trim()) return;
 
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
 
     try {
       const response = await apiClient.get("/app/get-all-sms/", {
@@ -219,6 +221,7 @@ export default function Messages() {
       });
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
       if (firstLoad) setFirstLoad(false);
     }
   };
@@ -239,6 +242,7 @@ export default function Messages() {
     const endDateFormatted = formatDate(endDate);
 
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
 
     try {
       const response = await apiClient.get("/app/get-all-sms/", {
@@ -273,11 +277,14 @@ export default function Messages() {
       }
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
     }
   };
 
   const resetTickets = () => {
-    setFiltersms(allSms);
+    setFiltersms([]);
+    getAllSms(1);
+    setIsSearch(true);
     setPage(1);
     setHasMore(true);
   };
@@ -288,14 +295,16 @@ export default function Messages() {
   }, []);
 
   useEffect(() => {
-    if (search.trim() === "") {
-      setFiltersms(allSms);
-      setPage(1);
-      setHasMore(true);
-      return;
-    }
     setPage(1);
     setHasMore(true);
+
+    if (search.trim() === "") {
+      setFiltersms([]);
+      getAllSms(1);
+      setIsSearch(true);
+      return;
+    }
+
     const delayDebounceFn = setTimeout(() => {
       searchSms(search.trim(), 1);
     }, 1500);

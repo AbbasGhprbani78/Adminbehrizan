@@ -44,7 +44,7 @@ export default function Ticket() {
   const [firstLoad, setFirstLoad] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const getAllTickets = async (page = 1, page_size = 10) => {
+  const getAllTickets = async (page = 1, page_size = 25) => {
     if (page === 1 && firstLoad) setLoading(true);
     if (page > 1) setIsFetchingMore(true);
 
@@ -81,6 +81,7 @@ export default function Ticket() {
       setLoading(false);
       setIsFetchingMore(false);
       if (firstLoad) setFirstLoad(false);
+      setIsSearch(false);
     }
   };
 
@@ -88,7 +89,7 @@ export default function Ticket() {
     startDate,
     endDate,
     page = 1,
-    page_size = 10
+    page_size = 25
   ) => {
     const convertToEnglishDigits = (str) =>
       str.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
@@ -100,6 +101,7 @@ export default function Ticket() {
     const endDateFormatted = formatDate(endDate);
 
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
 
     try {
       const response = await apiClient.get("/app/ticket-admin/", {
@@ -135,12 +137,13 @@ export default function Ticket() {
       }
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
     }
   };
 
-  const filterTicketsByStatus = async (status, page = 1, page_size = 10) => {
+  const filterTicketsByStatus = async (status, page = 1, page_size = 25) => {
     if (page === 1) setIsSearch(true);
-
+    if (page > 1) setIsFetchingMore(true);
     try {
       const response = await apiClient.get("/app/ticket-admin/", {
         params: {
@@ -173,15 +176,17 @@ export default function Ticket() {
       });
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
     }
   };
 
   const filterTicketsByCategory = async (
     category,
     page = 1,
-    page_size = 10
+    page_size = 25
   ) => {
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
     try {
       const response = await apiClient.get("/app/ticket-admin/", {
         params: {
@@ -211,13 +216,15 @@ export default function Ticket() {
       });
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
     }
   };
 
-  const searchTickets = async (query, page = 1, page_size = 10) => {
+  const searchTickets = async (query, page = 1, page_size = 25) => {
     if (!query.trim()) return;
 
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
 
     try {
       const response = await apiClient.get("/app/ticket-admin/", {
@@ -247,11 +254,14 @@ export default function Ticket() {
     } finally {
       setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
+      setIsFetchingMore(false);
     }
   };
 
   const resetTickets = () => {
-    setFilterValue(allTickets);
+    setFilterValue([]);
+    getAllTickets(1);
+    setIsSearch(true);
     setPage(1);
     setHasMore(true);
   };
@@ -424,14 +434,15 @@ export default function Ticket() {
   }, []);
 
   useEffect(() => {
-    if (search.trim() === "") {
-      setFilterValue(allTickets);
-      setPage(1);
-      setHasMore(true);
-      return;
-    }
     setPage(1);
     setHasMore(true);
+    if (search.trim() === "") {
+      setFilterValue([]);
+      getAllTickets(1);
+      setIsSearch(true);
+      return;
+    }
+
     const delayDebounceFn = setTimeout(() => {
       searchTickets(search.trim(), 1);
     }, 1500);
@@ -449,8 +460,6 @@ export default function Ticket() {
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedTicket]);
-
-  console.log(filterValue);
 
   return (
     <div className={styles.wrapperpage}>

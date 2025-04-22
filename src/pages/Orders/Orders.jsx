@@ -254,6 +254,57 @@ export default function Orders() {
                             </p>
                           </div>
                         </div>
+                        <div className={styles.status_send_m}>
+                          <div className={styles.status_detail_m}>
+                            <div>
+                              <span> نوع : </span>
+                              <span
+                                className={`${
+                                  item?.trans_type === "33"
+                                    ? styles.green_trans
+                                    : styles.red_trans
+                                }`}
+                              >
+                                {item?.trans_type === "33"
+                                  ? "ارسال شده"
+                                  : "برگشتی"}
+                              </span>
+                            </div>
+                            <div className={styles.wrap_date_detail}>
+                              <span> تاریخ : </span>
+                              <p
+                                style={{
+                                  direction: "ltr",
+                                  marginBottom: "0",
+                                  marginRight: "5px",
+                                }}
+                              >
+                                {convertToPersianNumbers(item?.trans_doc_date)}
+                              </p>
+                            </div>
+                          </div>
+                          <div className={styles.status_detail_m}>
+                            <div
+                              style={{ cursor: "pointer" }}
+                              className="d-flex align-items-center gap-2 cursour"
+                              onClick={() => toggleTable(i)}
+                            >
+                              <div className={styles.wrap_icon}>
+                                {openTableIndex === i ? (
+                                  <FaAngleUp />
+                                ) : (
+                                  <FaAngleDown />
+                                )}
+                              </div>
+                              <span>بارنامه : </span>
+                              <span>{convertToPersianNumbers(item?.bill)}</span>
+                            </div>
+                            <div>
+                              <span>شماره تراکنش : </span>
+                              <span>{item?.trans_doc_no}</span>
+                            </div>
+                          </div>
+                        </div>
                         {openTableIndex === i && (
                           <div className={styles.wrap_table}>
                             <StyledTableContainer component={Paper}>

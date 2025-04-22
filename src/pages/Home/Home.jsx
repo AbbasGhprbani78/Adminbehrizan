@@ -5,7 +5,6 @@ import Header from "../../components/module/Header/Header";
 import OrderTrackItem from "../../components/module/OrderTrackItem/OrderTrackItem";
 import SearchBox from "../../components/module/SearchBox/SearchBox";
 import Filter from "../../components/module/Filter/Filter";
-import axios from "axios";
 import NoneSearch from "../../components/module/NoneSearch/NoneSearch";
 import EmptyProduct from "../../components/module/EmptyProduct/EmptyProduct";
 import ModalFilter from "../../components/module/ModalFilter/ModalFilter";
@@ -28,7 +27,7 @@ export default function Home() {
   const [firstLoad, setFirstLoad] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const getAllOrders = async (page = 1, page_size = 25) => {
+  const getAllOrders = async (page = 1, page_size = 10) => {
     if (page === 1 && firstLoad) setLoading(true);
     if (page > 1) setIsFetchingMore(true);
     try {
@@ -61,6 +60,7 @@ export default function Home() {
     } finally {
       setLoading(false);
       setIsFetchingMore(false);
+      setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
     }
   };
@@ -79,6 +79,7 @@ export default function Home() {
     const endDateFormatted = formatDate(endDate);
 
     if (page === 1) setIsSearch(true);
+    if (page > 1) setIsFetchingMore(true);
 
     try {
       const response = await apiClient.get(`/app/get-order-detail-admin/`, {
@@ -111,13 +112,14 @@ export default function Home() {
       });
     } finally {
       setIsSearch(false);
+      setIsFetchingMore(false);
     }
   };
 
-  const searchOrders = async (query, page = 1, page_size = 25) => {
+  const searchOrders = async (query, page = 1, page_size = 10) => {
     if (!query.trim()) return;
     if (page === 1) setIsSearch(true);
-
+    if (page > 1) setIsFetchingMore(true);
     try {
       const response = await apiClient.get(`/app/get-order-detail-admin/`, {
         params: { query, page, page_size },
@@ -145,11 +147,14 @@ export default function Home() {
     } finally {
       setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
+      setIsFetchingMore(false);
     }
   };
 
   const resetOrders = () => {
-    setFilterValue(allOrders);
+    setFilterValue([]);
+    getAllOrders(1);
+    setIsSearch(true);
     setPage(1);
     setHasMore(true);
   };
@@ -162,14 +167,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (search.trim() === "") {
-      setFilterValue(allOrders);
-      setPage(1);
-      setHasMore(true);
-      return;
-    }
     setPage(1);
     setHasMore(true);
+    if (search.trim() === "") {
+      setFilterValue([]);
+      getAllOrders(1);
+      setIsSearch(true);
+      return;
+    }
     const delayDebounceFn = setTimeout(() => {
       searchOrders(search.trim(), 1);
     }, 1500);

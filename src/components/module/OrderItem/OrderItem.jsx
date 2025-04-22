@@ -170,18 +170,6 @@ export default function OrderItem({ item }) {
                           fontWeight: "bold",
                         }}
                       >
-                        وضعیت
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          position: "sticky",
-                          top: 0,
-                          backgroundColor: "#fff",
-                          fontFamily: "iranYekan",
-                          fontWeight: "bold",
-                        }}
-                      >
                         تصویر
                       </TableCell>
                     </TableRow>
