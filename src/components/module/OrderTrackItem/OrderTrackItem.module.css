@@ -172,10 +172,6 @@
   }
 }
 
-.reqnumberwrapper {
-  margin-right: 30px;
-}
-
 @media (max-width: 861px) {
   .mapstatus {
     flex-direction: column-reverse;

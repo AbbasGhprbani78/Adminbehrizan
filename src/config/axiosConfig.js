@@ -6,7 +6,7 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access");
+  const token = sessionStorage.getItem("access");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -22,24 +22,24 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refresh");
+        const refreshToken = sessionStorage.getItem("refresh");
         if (!refreshToken) {
           window.location.href = "/login";
           return Promise.reject(error);
         }
 
         const res = await axios.post(`${apiUrl}/user/refresh/`, {
-          refresh: localStorage.getItem("refresh"),
+          refresh: sessionStorage.getItem("refresh"),
         });
 
         const newAccessToken = res.data.access;
-        localStorage.setItem("access", newAccessToken);
+        sessionStorage.setItem("access", newAccessToken);
 
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
         return apiClient(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem("access");
+        sessionStorage.removeItem("access");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }

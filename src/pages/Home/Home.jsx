@@ -187,7 +187,7 @@ export default function Home() {
       <div className={styles.wrapperpage}>
         <SideBar />
         <div className={styles.pagecontent}>
-          <Header title={"سفارشات"} />
+          <Header title={"درخواست ها"} />
           <div className={styles.ordercontent}>
             {loading ? (
               <Loading />
@@ -252,6 +252,7 @@ export default function Home() {
             openModal={openModal}
             setOpenmodal={setOpenmodal}
             filterOrdersByDate={filterOrdersByDate}
+            isenglish={true}
           />
         </div>
       </div>

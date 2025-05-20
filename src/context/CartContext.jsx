@@ -9,7 +9,7 @@ export function CountProvaider({ children }) {
   const navigate = useNavigate();
 
   const validateUser = async () => {
-    const refresh = localStorage.getItem("refresh");
+    const refresh = sessionStorage.getItem("refresh");
 
     if (refresh) {
       const body = {
@@ -20,12 +20,12 @@ export function CountProvaider({ children }) {
         const response = await axios.post(`${apiUrl}/user/refresh/`, body);
 
         if (response.status === 200) {
-          localStorage.setItem("access", response.data.access);
+          sessionStorage.setItem("access", response.data.access);
         }
       } catch (e) {
         if (e.response.status === 401) {
-          localStorage.removeItem("refresh");
-          localStorage.removeItem("access");
+          sessionStorage.removeItem("refresh");
+          sessionStorage.removeItem("access");
           navigate("/login");
         }
       }

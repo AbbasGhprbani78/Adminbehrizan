@@ -20,13 +20,12 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import useSWR from "swr";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
-import apiClient from "../../config/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { styled } from "@mui/system";
+import useSWR from "swr";
+import apiClient from "../../config/axiosConfig";
 const StyledTableContainer = styled(TableContainer)({
   maxHeight: 400,
   "&::-webkit-scrollbar": {
@@ -45,39 +44,52 @@ const StyledTableContainer = styled(TableContainer)({
     backgroundColor: "#555",
   },
 });
+
 export default function Orders() {
   const [tab, setTab] = useState(1);
   const [search, setSearch] = useState("");
   const [filterProduct, setFilterProduct] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
-  const [openTableIndex, setOpenTableIndex] = useState(null);
+  const [openTableIndexes, setOpenTableIndexes] = useState(new Set());
   const [detailProduct, setDetailProduct] = useState([]);
-  const naviagte = useNavigate();
   const { id } = useParams();
 
   const toggleTable = (index) => {
-    setOpenTableIndex((prevIndex) => (prevIndex === index ? null : index));
+    setOpenTableIndexes((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
   };
-
   const getDetails = async () => {
     try {
       const response = await apiClient.get(`/app/order-detail-bill-code/${id}`);
+
       if (response.status === 200) {
-        console.log(response.data);
         setDetailProduct(response.data);
       }
     } catch (e) {
-      toast.error("مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (e.response?.status === 500) {
+        toast.error(e.response?.data?.message || "مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     }
   };
 
   const fetcher = async (url) => {
-    const response = await apiClient.get(url);
-    if (response.status === 200) {
+    try {
+      const response = await apiClient.get(url);
       setFilterProduct(response.data);
       return response.data;
+    } catch (e) {
+      if (e.response?.status === 500) {
+        alert("مشکلی سمت سرور پیش امده");
+      }
     }
   };
 
@@ -127,7 +139,7 @@ export default function Orders() {
     <div className={styles.wrapperpage}>
       <SideBar />
       <div className={styles.pagecontent}>
-        <Header title={"سفارشات"} />
+        <Header title={"درخواست ها"} />
         {isLoading ? (
           <Loading />
         ) : orderDetails?.length > 0 ? (
@@ -151,9 +163,6 @@ export default function Orders() {
                   وضعیت ارسالها
                 </button>
               </div>
-              <span className={styles.arrow_icon} onClick={() => naviagte("/")}>
-                <FaArrowLeftLong />
-              </span>
             </div>
             {tab === 1 ? (
               <>
@@ -180,7 +189,7 @@ export default function Orders() {
                       <div className={styles.orderitemcontainer}>
                         {filterProduct?.length > 0 ? (
                           filterProduct.map((item) => (
-                            <OrderItem key={item.order_detail_id} item={item} />
+                            <OrderItem key={item.item_code} item={item} />
                           ))
                         ) : (
                           <>
@@ -205,15 +214,15 @@ export default function Orders() {
                   {detailProduct?.length > 0 &&
                     detailProduct.map((item, i) => (
                       <div className={styles.detail_orders_wrap} key={i}>
-                        <div className={styles.status_send}>
+                        <div
+                          className={styles.status_send}
+                          style={{ cursor: "pointer" }}
+                          onClick={() => toggleTable(i)}
+                        >
                           <div className={styles.bilLading_date_wrap}>
-                            <div
-                              style={{ cursor: "pointer" }}
-                              className="d-flex align-items-center gap-2 cursour"
-                              onClick={() => toggleTable(i)}
-                            >
+                            <div className="d-flex align-items-center gap-2 cursour">
                               <div className={styles.wrap_icon}>
-                                {openTableIndex === i ? (
+                                {openTableIndexes?.has(i) ? (
                                   <FaAngleUp />
                                 ) : (
                                   <FaAngleDown />
@@ -290,7 +299,7 @@ export default function Orders() {
                               onClick={() => toggleTable(i)}
                             >
                               <div className={styles.wrap_icon}>
-                                {openTableIndex === i ? (
+                                {openTableIndexes.has(i) ? (
                                   <FaAngleUp />
                                 ) : (
                                   <FaAngleDown />
@@ -305,7 +314,7 @@ export default function Orders() {
                             </div>
                           </div>
                         </div>
-                        {openTableIndex === i && (
+                        {openTableIndexes?.has(i) && (
                           <div className={styles.wrap_table}>
                             <StyledTableContainer component={Paper}>
                               <Table

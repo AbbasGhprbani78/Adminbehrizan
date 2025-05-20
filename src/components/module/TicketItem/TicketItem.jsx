@@ -6,31 +6,58 @@ import apiClient from "../../../config/axiosConfig";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { convertToPersianNumbers } from "../../../utils/helper";
-export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
+import swal from "sweetalert";
+export default function TicketItem({ ticket, onClick }) {
   const [windowWidth, setWindowWidth] = useState(0);
   const [isClose, setIsClose] = useState(ticket?.ticket_close);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("fa-IR");
   };
 
-  const closeTicketHnadler = async (e) => {
-    const checked = e.target.checked ? 1 : 0;
-    setIsClose(checked);
-    onCheckboxChange(ticket.ticket_id, checked);
+  const closeTicket = async () => {
+    const willclose = await swal({
+      title: isClose
+        ? "ایا از بازکردن تیکت اطمینان دارید ؟"
+        : "آیا از بستن تیکت اطمینان دارید ؟",
+      icon: "warning",
+      buttons: ["خیر", "بله"],
+    });
 
-    const body = {
-      ticket_id: ticket.ticket_id,
-      close: checked,
-    };
+    if (willclose) {
+      try {
+        const body = {
+          ticket_id: ticket.ticket_id,
+          close: !isClose,
+        };
+        setIsLoading(true);
 
-    try {
-      await apiClient.put(`/app/ticket-admin/`, body);
-    } catch (e) {
-      toast.error("مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+        const response = await apiClient.put(`/app/ticket-admin/`, body);
+
+        if (response.status === 200) {
+          setIsClose(!isClose);
+          ticket.ticket_close = !isClose;
+          ticket.ticket_close_date = !isClose
+            ? response.data.ticket_close_date
+            : null;
+
+          swal({
+            title: "وضعیت تیکت با موفقیت تغییر کرد",
+            icon: "success",
+            button: "باشه",
+          });
+        }
+      } catch (e) {
+        if (e.response?.status === 500) {
+          toast.error(e.response?.data?.message || "مشکلی سمت سرور پیش آمده", {
+            position: "top-left",
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -47,9 +74,10 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
     };
   }, []);
 
+  console.log(ticket);
   return (
     <>
-      {windowWidth < 768 ? (
+      {windowWidth < 1136 ? (
         <>
           <div className={styles.TicketLine_m}>
             <div className="d-flex align-items-center" onClick={onClick}>
@@ -65,19 +93,48 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
                 {ticket?.ticket_informations[0]?.title}
               </span>
             </div>
-
+            <div className={styles.wrap_date}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "1rem 0",
+                }}
+              >
+                <span className={styles.open} style={{ marginLeft: "5px" }}>
+                  تاریخ ایجاد تیکت
+                </span>
+                <span> : {formatDate(ticket?.ticket_date)}</span>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "1rem 0",
+                }}
+              >
+                <span className={styles.closed} style={{ marginLeft: "5px" }}>
+                  تاریخ بسته شدن تیکت
+                </span>
+                <span>
+                  {" "}
+                  :{" "}
+                  {ticket?.ticket_close_date
+                    ? formatDate(ticket?.ticket_close_date)
+                    : " _ "}
+                </span>
+              </div>
+            </div>
             <div className="d-flex justify-content-between align-items-center mt-4">
-              <span>{formatDate(ticket?.ticket_date)}</span>
-              <label className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  className={styles.checkbox_input}
-                  checked={isClose}
-                  onChange={(e) => closeTicketHnadler(e)}
-                />
-                <span className={styles.checkmark}></span>
-                <span className={styles.label_text}>بستن تیکت</span>
-              </label>
+              <button
+                className={`${styles.btn_ticket} ${
+                  isLoading && styles.disable_btn_ticket
+                }`}
+                onClick={closeTicket}
+                disabled={isLoading}
+              >
+                {isClose ? "باز کردن تیکت" : "بستن تیکت"}
+              </button>
             </div>
           </div>
         </>
@@ -97,18 +154,33 @@ export default function TicketItem({ ticket, onClick, onCheckboxChange }) {
                 {ticket?.ticket_informations[0]?.title}
               </span>
             </div>
+
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span className={styles.closed} style={{ marginLeft: "5px" }}>
+                تاریخ بسته شدن تیکت
+              </span>
+              <span>
+                :
+                {ticket?.ticket_close_date
+                  ? formatDate(ticket?.ticket_close_date)
+                  : " _ "}
+              </span>
+            </div>
             <div className={styles.wrapper_left_ticket}>
-              <span>{formatDate(ticket?.ticket_date)}</span>
-              <label className={styles.custom_checkbox}>
-                <input
-                  type="checkbox"
-                  className={styles.checkbox_input}
-                  checked={isClose}
-                  onChange={(e) => closeTicketHnadler(e)}
-                />
-                <span className={styles.checkmark}></span>
-                <span className={styles.label_text}>بستن تیکت</span>
-              </label>
+              <span>تاریخ ایجاد تیکت : </span>
+              <span style={{ margin: "0 10px" }}>
+                {formatDate(ticket?.ticket_date)}
+              </span>
+
+              <button
+                className={`${styles.btn_ticket} ${
+                  isLoading && styles.disable_btn_ticket
+                }`}
+                onClick={closeTicket}
+                disabled={isLoading}
+              >
+                {isClose ? "باز کردن تیکت" : "بستن تیکت"}
+              </button>
             </div>
           </div>
           <ToastContainer />

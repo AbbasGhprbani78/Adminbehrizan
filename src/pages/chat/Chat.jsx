@@ -41,7 +41,7 @@ export default function Chat() {
   const messageEndRef = useRef(null);
   const [search, setSearch] = useState("");
   const [loading, setIsLoading] = useState(false);
-  const access_token = localStorage.getItem("access");
+  const access_token = sessionStorage.getItem("access");
   const socketUrl = `wss://behrizanpanel.ariisco.com/ws/chat/?token=${access_token}&receiver_code=${mainUser.supplier_code}`;
   const { users } = useUsers();
   useEffect(() => {
@@ -344,7 +344,7 @@ export default function Chat() {
 }
 
 // const getUsers = async () => {
-//   const access = localStorage.getItem("access");
+//   const access = sessionStorage.getItem("access");
 //   const headers = {
 //     Authorization: `Bearer ${access}`,
 //   };

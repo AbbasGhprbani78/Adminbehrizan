@@ -60,8 +60,8 @@
 }
 
 .wrap_table {
-  position: absolute;
-  top: 2rem;
+  /* position: absolute; */
+  margin-top: 20px;
   left: 0;
   width: 100%;
   z-index: 10;

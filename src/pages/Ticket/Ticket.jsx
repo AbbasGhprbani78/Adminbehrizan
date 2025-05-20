@@ -43,6 +43,7 @@ export default function Ticket() {
   const [isSearch, setIsSearch] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [prevTab, setPrevTab] = useState(tab);
 
   const getAllTickets = async (page = 1, page_size = 25) => {
     if (page === 1 && firstLoad) setLoading(true);
@@ -432,6 +433,15 @@ export default function Ticket() {
     getAllTickets();
     getUserType();
   }, []);
+
+  useEffect(() => {
+    if (prevTab === 3 && tab === 1) {
+      setLoading(true);
+      getAllTickets();
+    }
+
+    setPrevTab(tab);
+  }, [tab]);
 
   useEffect(() => {
     setPage(1);

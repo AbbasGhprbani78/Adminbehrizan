@@ -32,10 +32,13 @@ export default function OrderTrackItem({ order, number }) {
         fieldValue = order.final_confirm_date;
         break;
       case "4":
-        fieldValue = order?.deliever_date_max;
+        fieldValue = order?.last_trans_doc_date;
         break;
       case "5":
-        fieldValue = order?.deliever_date_max;
+        fieldValue = order?.request_date;
+        break;
+      case "6":
+        fieldValue = order?.last_trans_doc_date;
         break;
       case "7":
         fieldValue = order?.request_date;
@@ -56,29 +59,26 @@ export default function OrderTrackItem({ order, number }) {
 
   useEffect(() => {
     switch (latestItem) {
-      case "7":
+      case "8":
         setCurrentStep(1);
         break;
-      case "8":
+      case "1":
         setCurrentStep(2);
         break;
-      case "1":
+      case "2":
         setCurrentStep(3);
         break;
-      case "2":
+      case "3":
         setCurrentStep(4);
         break;
-      case "3":
-        setCurrentStep(5);
-        break;
       case "4":
-        setCurrentStep(6);
+        setCurrentStep(5);
         break;
       case "5":
         setCurrentStep(7);
         break;
       case "6":
-        setCurrentStep(8);
+        setCurrentStep(6);
         break;
     }
   }, [latestItem]);
@@ -88,14 +88,12 @@ export default function OrderTrackItem({ order, number }) {
       <div className={styles.ordertrackitemwrapper}>
         <div className={styles.ordertrackdetail}>
           <div className={styles.rightdetail}>
-            <span className={`${styles.titlebold} ${styles.number_order}`}>
+            {/* <span className={`${styles.titlebold} ${styles.number_order}`}>
               سفارش {convertToPersianNumbers(number + 1)}
-            </span>
+            </span> */}
             <div className={styles.reqnumberwrapper}>
               <span className={styles.titlebold}>شماره درخواست :</span>
-              <span style={{ marginRight: "10px" }}>
-                {convertToPersianNumbers(order?.id)}
-              </span>
+              <span>{convertToPersianNumbers(order?.id)}</span>
             </div>
           </div>
 
@@ -122,7 +120,7 @@ export default function OrderTrackItem({ order, number }) {
               className={`${styles.detailbtn}`}
               onClick={() => navigate(`/orders/${order.id}`)}
             >
-              جزئیات محصول
+              جزئیات
             </button>
           </div>
           <div className={styles.wrapper} style={{ direction: "ltr" }}>
@@ -130,7 +128,7 @@ export default function OrderTrackItem({ order, number }) {
               <div className={`${styles.pragressContainer}`}>
                 <div
                   className={styles.progress}
-                  style={{ width: `${(currentStep - 1) * 14.28}%` }}
+                  style={{ width: `${(currentStep - 1) * 16.66}%` }}
                 ></div>
                 <div
                   className={`${styles.circle} ${
@@ -149,81 +147,69 @@ export default function OrderTrackItem({ order, number }) {
                     currentStep >= 2 ? `${styles.active}` : ""
                   }`}
                 >
-                  <AiOutlineFileDone
-                    className={`${styles.iconstatus} ${
-                      currentStep >= 2 ? `${styles.activeicon}` : ""
-                    }`}
-                  />
-                  <p className={styles.itemprogtext}>تایید درخواست</p>
-                </div>
-                <div
-                  className={`${styles.circle} ${
-                    currentStep >= 3 ? `${styles.active}` : ""
-                  }`}
-                >
                   <IoBagAddOutline
                     className={`${styles.iconstatus} ${
-                      currentStep >= 3 ? `${styles.activeicon}` : ""
+                      currentStep >= 2 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>صدور سفارش</p>
                 </div>
                 <div
                   className={`${styles.circle} ${
-                    currentStep >= 4 ? `${styles.active}` : ""
+                    currentStep >= 3 ? `${styles.active}` : ""
                   }`}
                 >
                   <MdOutlineShoppingCartCheckout
                     className={`${styles.iconstatus} ${
-                      currentStep >= 4 ? `${styles.activeicon}` : ""
+                      currentStep >= 3 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>تایید فروش</p>
                 </div>
                 <div
                   className={`${styles.circle} ${
-                    currentStep >= 5 ? `${styles.active}` : ""
+                    currentStep >= 4 ? `${styles.active}` : ""
                   }`}
                 >
                   <IoMdDoneAll
                     className={`${styles.iconstatus} ${
-                      currentStep >= 5 ? `${styles.activeicon}` : ""
+                      currentStep >= 4 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>تایید نهایی</p>
                 </div>
                 <div
                   className={`${styles.circle} ${
-                    currentStep >= 6 ? `${styles.active}` : ""
+                    currentStep >= 5 ? `${styles.active}` : ""
                   }`}
                 >
                   <FiTruck
                     className={`${styles.iconstatus} ${
-                      currentStep >= 6 ? `${styles.activeicon}` : ""
+                      currentStep >= 5 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>در حال ارسال</p>
                 </div>
                 <div
                   className={`${styles.circle} ${
-                    currentStep >= 7 ? `${styles.active}` : ""
+                    currentStep >= 6 ? `${styles.active}` : ""
                   }`}
                 >
                   <BsBox2
                     className={`${styles.iconstatus} ${
-                      currentStep >= 7 ? `${styles.activeicon}` : ""
+                      currentStep >= 6 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>کامل ارسال شده</p>
                 </div>
                 <div
                   className={`${styles.circle} ${
-                    currentStep >= 8 ? `${styles.active}` : ""
+                    currentStep >= 7 ? `${styles.active}` : ""
                   }`}
                 >
                   <HiOutlineNewspaper
                     className={`${styles.iconstatus} ${
-                      currentStep >= 8 ? `${styles.activeicon}` : ""
+                      currentStep >= 7 ? `${styles.activeicon}` : ""
                     }`}
                   />
                   <p className={styles.itemprogtext}>مختومه</p>
@@ -242,10 +228,10 @@ export default function OrderTrackItem({ order, number }) {
         >
           <div className={styles.orderdetailitem}>
             <span className={styles.orderdetailtitle}>
-              {order.status == 6 ? "علت مختومه :" : "تاریخ اخرین وضعیت : "}
+              {order.status == 5 ? "علت مختومه :" : "تاریخ اخرین وضعیت : "}
             </span>
             <span className={styles.orderdetailtext}>
-              {order.status == 6
+              {order.status == 5
                 ? order?.dismissreason
                 : order?.request_date
                 ? addSlashesToDate(

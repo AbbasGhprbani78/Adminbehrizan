@@ -10,18 +10,36 @@ export default function ModalFilter({
   setOpenmodal,
   openModal,
   filterOrdersByDate,
+  isenglish,
 }) {
   const [selectedDayRange, setSelectedDayRange] = useState([null, null]);
+  const [showData, setShowDate] = useState(["", ""]);
   const [shamsiRange, setShamsiRange] = useState(["", ""]);
 
   const handleDateChange = (dates) => {
     setSelectedDayRange(dates);
 
     if (dates[0] && dates[1]) {
-      setShamsiRange([
-        new DateObject(dates[0]).convert(persian).format("YYYY/MM/DD"),
-        new DateObject(dates[1]).convert(persian).format("YYYY/MM/DD"),
-      ]);
+      const shamsiStart = new DateObject(dates[0]).convert(persian);
+      const shamsiEnd = new DateObject(dates[1]).convert(persian);
+
+      let startDate = shamsiStart.format("YYYY/MM/DD");
+      let endDate = shamsiEnd.format("YYYY/MM/DD");
+
+      setShowDate([startDate, endDate]);
+
+      if (isenglish) {
+        const gregorianStart = new Date(
+          new DateObject(dates[0]).convert(persian).toDate()
+        );
+        const gregorianEnd = new Date(
+          new DateObject(dates[1]).convert(persian).toDate()
+        );
+        startDate = gregorianStart.toISOString().split("T")[0];
+        endDate = gregorianEnd.toISOString().split("T")[0];
+      }
+
+      setShamsiRange([startDate, endDate]);
     } else {
       setShamsiRange(["", ""]);
     }
@@ -59,7 +77,7 @@ export default function ModalFilter({
                   <input
                     type="text"
                     className={styles.date_input}
-                    value={shamsiRange[0]}
+                    value={showData[0]}
                     readOnly
                   />
                   <CiCalendarDate className={styles.icon_ca} />
@@ -71,7 +89,7 @@ export default function ModalFilter({
                   <input
                     type="text"
                     className={styles.date_input}
-                    value={shamsiRange[1]}
+                    value={showData[1]}
                     readOnly
                   />
                   <CiCalendarDate className={styles.icon_ca} />

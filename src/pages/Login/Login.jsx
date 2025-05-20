@@ -53,8 +53,8 @@ export default function Login() {
       try {
         const response = await axios.post(`${apiUrl}/user/admin-login/`, body);
         if (response.status === 200) {
-          localStorage.setItem("refresh", response.data.refresh);
-          localStorage.setItem("access", response.data.access_token);
+          sessionStorage.setItem("refresh", response.data.refresh);
+          sessionStorage.setItem("access", response.data.access_token);
           localStorage.removeItem("email");
           localStorage.removeItem("phone");
           navigate("/");

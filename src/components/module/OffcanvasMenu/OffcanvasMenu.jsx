@@ -29,8 +29,8 @@ export default function OffcanvasMenu({ setShowSideBar, showSideBar }) {
       buttons: ["خیر", "بله"],
     }).then((willLogout) => {
       if (willLogout) {
-        localStorage.removeItem("refresh");
-        localStorage.removeItem("access");
+        sessionStorage.removeItem("refresh");
+        sessionStorage.removeItem("access");
         naviagte("/login");
       }
     });
