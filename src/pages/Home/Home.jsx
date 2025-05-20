@@ -54,9 +54,11 @@ export default function Home() {
         }
       }
     } catch (e) {
-      toast.error("مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (e.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setLoading(false);
       setIsFetchingMore(false);
@@ -107,9 +109,11 @@ export default function Home() {
         }
       }
     } catch (error) {
-      toast.error("مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (error.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setIsSearch(false);
       setIsFetchingMore(false);
@@ -141,9 +145,11 @@ export default function Home() {
         }
       }
     } catch (error) {
-      toast.error("مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (error.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setIsSearch(false);
       if (firstLoad) setFirstLoad(false);

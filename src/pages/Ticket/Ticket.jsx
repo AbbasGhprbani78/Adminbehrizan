@@ -172,9 +172,11 @@ export default function Ticket() {
         }
       }
     } catch (e) {
-      toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (e.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setIsSearch(false);
       setIsFetchingMore(false);
@@ -212,9 +214,11 @@ export default function Ticket() {
         }
       }
     } catch (e) {
-      toast.error(e.response?.data?.message || " مشکلی سمت سرور پیش آمده", {
-        position: "top-left",
-      });
+      if (e.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setIsSearch(false);
       setIsFetchingMore(false);
@@ -249,9 +253,11 @@ export default function Ticket() {
         }
       }
     } catch (e) {
-      toast.error(e.response?.data?.erorr, {
-        position: "top-left",
-      });
+      if (e.response?.status !== 404) {
+        toast.error("مشکلی سمت سرور پیش آمده", {
+          position: "top-left",
+        });
+      }
     } finally {
       setIsSearch(false);
       if (firstLoad) setFirstLoad(false);
