@@ -10,11 +10,11 @@ export default function CustomerItem({
     setId(user.supplier_code);
     setUserInfo((prev) => ({
       ...prev,
-      email: user.email,
-      full_name: user.full_name,
-      national_id: user.national_id,
-      phone_number: user.phone_number,
-      username: user.username,
+      email: user.email ? user.email : "",
+      full_name: user.full_name ? user.full_name : "",
+      national_id: user.national_id ? user.national_id : "",
+      phone_number: user.phone_number ? user.phone_number : "",
+      username: user.username ? user.username : "",
       is_active: user.is_active,
     }));
     setShowModal(true);
@@ -28,7 +28,13 @@ export default function CustomerItem({
         </div>
         <span className={styles.user_fullname}>{user?.full_name}</span>
       </div>
-      <button className={styles.edit_btn} onClick={fillUserInfo}>
+      <button
+        className={styles.edit_btn}
+        onClick={() => {
+          setUserInfo({});
+          fillUserInfo();
+        }}
+      >
         ویرایش
         <CiEdit className={styles.icon} />
       </button>

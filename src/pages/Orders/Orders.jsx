@@ -98,7 +98,7 @@ export default function Orders() {
     fetcher,
     {
       revalidateOnFocus: false,
-      dedupingInterval: 15 * 60 * 1000,
+      dedupingInterval: 0,
     }
   );
 

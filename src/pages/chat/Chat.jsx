@@ -19,9 +19,9 @@ const fetcher = async (url) => {
 
 const useUsers = () => {
   const { data, error } = useSWR(`/chat/get-user-roomid/`, fetcher, {
-    dedupingInterval: 15 * 60 * 1000,
+    dedupingInterval: 0,
     revalidateOnFocus: false,
-    refreshInterval: 15 * 60 * 1000,
+    refreshInterval: 0,
   });
 
   return {

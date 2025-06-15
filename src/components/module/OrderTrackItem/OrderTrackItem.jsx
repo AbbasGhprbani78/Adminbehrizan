@@ -226,7 +226,7 @@ export default function OrderTrackItem({ order, number }) {
             gap: "20px",
           }}
         >
-          <div className={styles.orderdetailitem}>
+          {/* <div className={styles.orderdetailitem}>
             <span className={styles.orderdetailtitle}>
               {order.status == 5 ? "علت مختومه :" : "تاریخ اخرین وضعیت : "}
             </span>
@@ -239,7 +239,7 @@ export default function OrderTrackItem({ order, number }) {
                   )
                 : "N/A"}
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

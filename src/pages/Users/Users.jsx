@@ -123,6 +123,7 @@ export default function Users() {
     }
   };
 
+  console.log(userInfo);
   return (
     <>
       <div className={styles.wrapperpage}>
